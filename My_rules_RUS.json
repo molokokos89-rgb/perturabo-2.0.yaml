@@ -1,128 +1,142 @@
-payload:
-  - DOMAIN,init.itunes.apple.com
-  - DOMAIN,bag.itunes.apple.com
-  - IP-CIDR,213.248.110.0/24
-  - IP-CIDR,17.253.38.0/24
-  - IP-CIDR,17.253.14.0/24
-  - IP-CIDR,95.163.0.0/16
-  - IP-CIDR,217.20.144.0/20
-  - IP-CIDR,128.140.128.0/18
-  - IP-CIDR,178.22.88.0/21
-  - IP-CIDR,185.194.32.0/22
-  - IP-CIDR,155.212.204.0/24
-  - IP-CIDR,194.54.14.0/23
-  - IP-CIDR,194.54.64.0/19
-  - IP-CIDR,194.186.207.0/24
-  - IP-CIDR,91.194.226.0/23
-  - IP-CIDR,185.101.200.0/22
-  - IP-CIDR,217.14.48.0/20
-  - IP-CIDR,217.12.96.0/20
-  - IP-CIDR,109.207.0.0/19
-  - IP-CIDR,176.215.12.0/24
-  - DOMAIN-KEYWORD,polaris
-  - DOMAIN-KEYWORD,boosty
-  - DOMAIN-KEYWORD,bitrix24
-  - DOMAIN-KEYWORD,bitrix
-  - DOMAIN-KEYWORD,gosuslugi
-  - DOMAIN-KEYWORD,rostelecom
-  - DOMAIN-KEYWORD,goskey
-  - DOMAIN-KEYWORD,myschool
-  - DOMAIN-KEYWORD,moya-shkola
-  - DOMAIN-KEYWORD,sbp
-  - DOMAIN-KEYWORD,nspk
-  - DOMAIN-KEYWORD,mir-pay
-  - DOMAIN-KEYWORD,qiwi
-  - DOMAIN-KEYWORD,sberid
-  - DOMAIN-KEYWORD,tinkoffid
-  - DOMAIN-KEYWORD,yandexid
-  - DOMAIN-KEYWORD,nalog
-  - DOMAIN-KEYWORD,fns
-  - DOMAIN-KEYWORD,pfr
-  - DOMAIN-KEYWORD,sfr
-  - DOMAIN-KEYWORD,sberbank
-  - DOMAIN-KEYWORD,sber
-  - DOMAIN-KEYWORD,tinkoff
-  - DOMAIN-KEYWORD,tbank
-  - DOMAIN-KEYWORD,vtb
-  - DOMAIN-KEYWORD,alfabank
-  - DOMAIN-KEYWORD,raiffeisen
-  - DOMAIN-KEYWORD,rshb
-  - DOMAIN-KEYWORD,gazprombank
-  - DOMAIN-KEYWORD,gpb
-  - DOMAIN-KEYWORD,ozon
-  - DOMAIN-KEYWORD,wildberries
-  - DOMAIN-KEYWORD,avito
-  - DOMAIN-KEYWORD,lamoda
-  - DOMAIN-KEYWORD,megamarket
-  - DOMAIN-KEYWORD,yandex
-  - DOMAIN-KEYWORD,dzen
-  - DOMAIN-KEYWORD,yoomoney
-  - DOMAIN-KEYWORD,kinopoisk
-  - DOMAIN-KEYWORD,afisha
-  - DOMAIN-KEYWORD,vk
-  - DOMAIN-KEYWORD,odnoklassniki
-  - DOMAIN-KEYWORD,my.games
-  - DOMAIN-KEYWORD,megafon
-  - DOMAIN-KEYWORD,mts
-  - DOMAIN-KEYWORD,beeline
-  - DOMAIN-KEYWORD,tele2
-  - DOMAIN-KEYWORD,rjd
-  - DOMAIN-KEYWORD,rzhd
-  - DOMAIN-KEYWORD,aeroflot
-  - DOMAIN-KEYWORD,s7
-  - DOMAIN-KEYWORD,2gis
-  - DOMAIN-KEYWORD,dgis
-  - DOMAIN-SUFFIX,polaris-iot.com
-  - DOMAIN-SUFFIX,tk-kit.net
-  - DOMAIN-SUFFIX,ntp.org
-  - DOMAIN-SUFFIX,boosty.to
-  - DOMAIN-SUFFIX,max.ru
-  - DOMAIN-SUFFIX,max.dev
-  - DOMAIN-SUFFIX,bitrix24.ru
-  - DOMAIN-SUFFIX,b24.ru
-  - DOMAIN-SUFFIX,bitrix24.com
-  - DOMAIN-SUFFIX,bitrix24.net
-  - DOMAIN-SUFFIX,bitrixlabs.ru
-  - DOMAIN-SUFFIX,bx24.net
-  - DOMAIN-SUFFIX,bx24.ru
-  - DOMAIN-SUFFIX,gosuslugi.ru
-  - DOMAIN-SUFFIX,pgu.mos.ru
-  - DOMAIN-SUFFIX,rt.ru
-  - DOMAIN-SUFFIX,bio.rt.ru
-  - DOMAIN-SUFFIX,edu.ru
-  - DOMAIN-SUFFIX,sber.ru
-  - DOMAIN-SUFFIX,wb.ru
-  - DOMAIN-SUFFIX,wbbasket.ru
-  - DOMAIN-SUFFIX,ya.ru
-  - DOMAIN-SUFFIX,vk.com
-  - DOMAIN-SUFFIX,vk.ru
-  - DOMAIN-SUFFIX,vk.me
-  - DOMAIN-SUFFIX,vk-cdn.net
-  - DOMAIN-SUFFIX,userapi.com
-  - DOMAIN-SUFFIX,vkuseraudio.net
-  - DOMAIN-SUFFIX,vk.cc
-  - DOMAIN-SUFFIX,vk-portal.net
-  - DOMAIN-SUFFIX,vkuserconnect.com
-  - DOMAIN-SUFFIX,vkat.me
-  - DOMAIN-SUFFIX,vk.company
-  - DOMAIN-SUFFIX,oneme.ru
-  - DOMAIN-SUFFIX,okcdn.ru
-  - DOMAIN-SUFFIX,ok.ru
-  - DOMAIN-SUFFIX,ok.me
-  - DOMAIN-SUFFIX,mail.ru
-  - DOMAIN-SUFFIX,ru
-  - DOMAIN-SUFFIX,su
-  - DOMAIN-SUFFIX,xn--p1ai
-  - DOMAIN-SUFFIX,moscow
-  - DOMAIN-SUFFIX,by
-  - DOMAIN-SUFFIX,org.ru
-  - DOMAIN-SUFFIX,net.ru
-  - DOMAIN-SUFFIX,pp.ru
-  - DOMAIN-SUFFIX,inappstory.ru
-  - DOMAIN-SUFFIX,mindbox.ru
-  - DOMAIN-SUFFIX,magnit.ru
-  - DOMAIN-SUFFIX,kazanexpress.ru
-  - DOMAIN-SUFFIX,mm.ru
-  - DOMAIN-SUFFIX,kaspersky-labs.com
-  - DOMAIN-SUFFIX,dbankcloud.com
-  - DOMAIN-SUFFIX,dbankcdn.com
+{
+  "version": 1,
+  "rules": [
+    {
+      "domain": [
+        "init.itunes.apple.com",
+        "bag.itunes.apple.com"
+      ],
+      "domain_suffix": [
+        "polaris-iot.com",
+        "tk-kit.net",
+        "ntp.org",
+        "boosty.to",
+        "max.ru",
+        "max.dev",
+        "bitrix24.ru",
+        "b24.ru",
+        "bitrix24.com",
+        "bitrix24.net",
+        "bitrixlabs.ru",
+        "bx24.net",
+        "bx24.ru",
+        "gosuslugi.ru",
+        "pgu.mos.ru",
+        "rt.ru",
+        "bio.rt.ru",
+        "edu.ru",
+        "sber.ru",
+        "wb.ru",
+        "wbbasket.ru",
+        "ya.ru",
+        "vk.com",
+        "vk.ru",
+        "vk.me",
+        "vk-cdn.net",
+        "userapi.com",
+        "vkuseraudio.net",
+        "vk.cc",
+        "vk-portal.net",
+        "vkuserconnect.com",
+        "vkat.me",
+        "vk.company",
+        "oneme.ru",
+        "okcdn.ru",
+        "ok.ru",
+        "ok.me",
+        "mail.ru",
+        "ru",
+        "su",
+        "xn--p1ai",
+        "moscow",
+        "by",
+        "org.ru",
+        "net.ru",
+        "pp.ru",
+        "inappstory.ru",
+        "mindbox.ru",
+        "magnit.ru",
+        "kazanexpress.ru",
+        "mm.ru",
+        "kaspersky-labs.com",
+        "dbankcloud.com",
+        "dbankcdn.com"
+      ],
+      "domain_keyword": [
+        "polaris",
+        "boosty",
+        "bitrix24",
+        "bitrix",
+        "gosuslugi",
+        "rostelecom",
+        "goskey",
+        "myschool",
+        "moya-shkola",
+        "sbp",
+        "nspk",
+        "mir-pay",
+        "qiwi",
+        "sberid",
+        "tinkoffid",
+        "yandexid",
+        "nalog",
+        "fns",
+        "pfr",
+        "sfr",
+        "sberbank",
+        "sber",
+        "tinkoff",
+        "tbank",
+        "vtb",
+        "alfabank",
+        "raiffeisen",
+        "rshb",
+        "gazprombank",
+        "gpb",
+        "ozon",
+        "wildberries",
+        "avito",
+        "lamoda",
+        "megamarket",
+        "yandex",
+        "dzen",
+        "yoomoney",
+        "kinopoisk",
+        "afisha",
+        "vk",
+        "odnoklassniki",
+        "my.games",
+        "megafon",
+        "mts",
+        "beeline",
+        "tele2",
+        "rjd",
+        "rzhd",
+        "aeroflot",
+        "s7",
+        "2gis",
+        "dgis"
+      ],
+      "ip_cidr": [
+        "213.248.110.0/24",
+        "17.253.38.0/24",
+        "17.253.14.0/24",
+        "95.163.0.0/16",
+        "217.20.144.0/20",
+        "128.140.128.0/18",
+        "178.22.88.0/21",
+        "185.194.32.0/22",
+        "155.212.204.0/24",
+        "194.54.14.0/23",
+        "194.54.64.0/19",
+        "194.186.207.0/24",
+        "91.194.226.0/23",
+        "185.101.200.0/22",
+        "217.14.48.0/20",
+        "217.12.96.0/20",
+        "109.207.0.0/19",
+        "176.215.12.0/24"
+      ]
+    }
+  ]
+}
