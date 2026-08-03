@@ -1,4 +1,4 @@
-port: 0
+[03.08.2026 13:04] Мама медведь🍀: port: 0
 socks-port: 0
 redir-port: 0
 tproxy-port: 0
@@ -11,10 +11,16 @@ ipv6: false
 global-client-fingerprint: chrome
 keep-alive-idle: 30
 keep-alive-interval: 30
+
 dns:
   enable: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - 77.88.8.8
+    - 8.8.8.8
+    - https://dns.yandex.ru/dns-query
+    - https://1.1.1.1/dns-query
   fake-ip-filter:
     - '*.githubusercontent.com'
     - '*.github.com'
@@ -94,7 +100,7 @@ rule-providers:
   my-direct-rules:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/refs/heads/main/my_rules.yaml
+    url: https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/my_rules.yaml
     path: ./rules/my_rules.yaml
     interval: 86400
 
@@ -111,6 +117,7 @@ rules:
   - DOMAIN-SUFFIX,mc.yandex.ru,REJECT
   - DOMAIN-SUFFIX,doubleclick.net,REJECT
   - DOMAIN-SUFFIX,vk-analytics.ru,REJECT
+  - RULE-SET,my-direct-rules,DIRECT
   - DOMAIN-KEYWORD,gemini,VLESS-Auto
   - DOMAIN-SUFFIX,google.com,VLESS-Auto
   - DOMAIN-SUFFIX,googleapis.com,VLESS-Auto
@@ -167,5 +174,4 @@ rules:
   - DOMAIN-SUFFIX,apple-livephotoskit.com,VLESS-Auto
   - DOMAIN-SUFFIX,cdn-apple.com,VLESS-Auto
   - DOMAIN-SUFFIX,ampaeservices.com,VLESS-Auto
-  - RULE-SET,my-direct-rules,DIRECT
   - MATCH,VLESS-Auto
