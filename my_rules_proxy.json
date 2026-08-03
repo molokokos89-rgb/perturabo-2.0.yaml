@@ -1,5 +1,6 @@
 payload:
   - DOMAIN-KEYWORD,gemini
+  - DOMAIN-KEYWORD,gemini.google.com
   - DOMAIN-KEYWORD,telegram
   - DOMAIN-SUFFIX,google.com
   - DOMAIN-SUFFIX,googleapis.com
