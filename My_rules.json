@@ -1,5 +1,5 @@
-rules:
-- DOMAIN,init.itunes.apple.com,DIRECT
+payload:
+  - DOMAIN,init.itunes.apple.com,DIRECT
   - DOMAIN,bag.itunes.apple.com,DIRECT
   - IP-CIDR,213.248.110.0/24,DIRECT
   - IP-CIDR,17.253.38.0/24,DIRECT
