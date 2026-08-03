@@ -117,6 +117,13 @@ rules:
   - DOMAIN-SUFFIX,mc.yandex.ru,REJECT
   - DOMAIN-SUFFIX,doubleclick.net,REJECT
   - DOMAIN-SUFFIX,vk-analytics.ru,REJECT
+  - DOMAIN-KEYWORD,polaris,DIRECT
+  - DOMAIN-SUFFIX,polaris-iot.com,DIRECT
+  - DOMAIN-SUFFIX,vk.ru,DIRECT
+  - DOMAIN-SUFFIX,vk.com,DIRECT
+  - DOMAIN-SUFFIX,ru,DIRECT
+  - DOMAIN-SUFFIX,su,DIRECT
+  - DOMAIN-SUFFIX,xn--p1ai,DIRECT
   - RULE-SET,my-direct-rules,DIRECT
   - DOMAIN-KEYWORD,gemini,VLESS-Auto
   - DOMAIN-SUFFIX,google.com,VLESS-Auto
