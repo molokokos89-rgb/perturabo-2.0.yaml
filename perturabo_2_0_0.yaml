@@ -74,10 +74,18 @@ proxy-providers:
       enable: true
       url: http://gstatic.com
       interval: 600
-
   vless-sub-2:
     type: http
     url: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/8a0ea60f714033c3ff85ab67f08d944fe2fe0776/BLACK_VLESS_RUS.txt
+    interval: 7200
+    path: ./vless_sub_2.yaml
+    health-check:
+      enable: true
+      url: http://gstatic.com
+      interval: 1200
+  vless-sub-3:
+    type: http
+    url: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt
     interval: 7200
     path: ./vless_sub_2.yaml
     health-check:
@@ -95,12 +103,13 @@ proxy-groups:
     use:
       - vless-sub-1
       - vless-sub-2
+      - vless-sub-3
 
 rule-providers:
   my-direct-rules:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/refs/heads/main/my_rules.yaml
+    url: https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/refs/heads/main/my_rules.json
     path: ./rules/my_rules.yaml
     interval: 14400
 
