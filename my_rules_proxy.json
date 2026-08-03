@@ -1,58 +1,69 @@
-payload:
-  - DOMAIN-KEYWORD,gemini
-  - DOMAIN-KEYWORD,gemini.google.com
-  - DOMAIN-KEYWORD,telegram
-  - DOMAIN-SUFFIX,google.com
-  - DOMAIN-SUFFIX,googleapis.com
-  - DOMAIN-SUFFIX,googleusercontent.com
-  - DOMAIN-SUFFIX,gstatic.com
-  - DOMAIN-SUFFIX,ggpht.com
-  - DOMAIN-SUFFIX,g.co
-  - DOMAIN-SUFFIX,googleanalytics.com
-  - DOMAIN-SUFFIX,googletagmanager.com
-  - DOMAIN-SUFFIX,googlesyndication.com
-  - DOMAIN-SUFFIX,google-analytics.com
-  - DOMAIN-SUFFIX,googleadservices.com
-  - DOMAIN-SUFFIX,gvt1.com
-  - DOMAIN-SUFFIX,gvt2.com
-  - DOMAIN-SUFFIX,goo.gl
-  - DOMAIN-SUFFIX,youtube.com
-  - DOMAIN-SUFFIX,ytimg.com
-  - DOMAIN-SUFFIX,googlelabs.com
-  - DOMAIN-SUFFIX,github.com
-  - DOMAIN-SUFFIX,githubusercontent.com
-  - DOMAIN-SUFFIX,remanga.org
-  - DOMAIN-SUFFIX,telegram.org
-  - DOMAIN-SUFFIX,telegram.me
-  - DOMAIN-SUFFIX,telegram.dog
-  - DOMAIN-SUFFIX,telegram.space
-  - DOMAIN-SUFFIX,tdesktop.org
-  - DOMAIN-SUFFIX,tdesktop.com
-  - DOMAIN-SUFFIX,telegra.ph
-  - DOMAIN-SUFFIX,telega.one
-  - DOMAIN-SUFFIX,t.me
-  - DOMAIN-SUFFIX,tx.me
-  - DOMAIN-SUFFIX,cdn-telegram.org
-  - DOMAIN-SUFFIX,telegram-cdn.org
-  - DOMAIN-SUFFIX,comments.app
-  - DOMAIN-SUFFIX,contest.com
-  - DOMAIN-SUFFIX,fragment.com
-  - DOMAIN-SUFFIX,graph.org
-  - DOMAIN-SUFFIX,quiz.directory
-  - DOMAIN-SUFFIX,telesco.pe
-  - DOMAIN-SUFFIX,tg.dev
-  - DOMAIN-SUFFIX,ton.org
-  - DOMAIN-SUFFIX,toncenter.com
-  - DOMAIN-SUFFIX,usercontent.dev
-  - IP-CIDR,91.108.4.0/22
-  - IP-CIDR,91.108.56.0/22
-  - IP-CIDR,149.154.160.0/20
-  - DOMAIN-SUFFIX,apple.com
-  - DOMAIN-SUFFIX,icloud.com
-  - DOMAIN-SUFFIX,icloud-content.com
-  - DOMAIN-SUFFIX,me.com
-  - DOMAIN-SUFFIX,mzstatic.com
-  - DOMAIN-SUFFIX,apple-cloudkit.com
-  - DOMAIN-SUFFIX,apple-livephotoskit.com
-  - DOMAIN-SUFFIX,cdn-apple.com
-  - DOMAIN-SUFFIX,ampaeservices.com
+{
+  "version": 1,
+  "rules": [
+    {
+      "domain_suffix": [
+        "google.com",
+        "googleapis.com",
+        "googleusercontent.com",
+        "gstatic.com",
+        "ggpht.com",
+        "g.co",
+        "googleanalytics.com",
+        "googletagmanager.com",
+        "googlesyndication.com",
+        "google-analytics.com",
+        "googleadservices.com",
+        "gvt1.com",
+        "gvt2.com",
+        "goo.gl",
+        "youtube.com",
+        "ytimg.com",
+        "googlelabs.com",
+        "github.com",
+        "githubusercontent.com",
+        "remanga.org",
+        "telegram.org",
+        "telegram.me",
+        "telegram.dog",
+        "telegram.space",
+        "tdesktop.org",
+        "tdesktop.com",
+        "telegra.ph",
+        "telega.one",
+        "t.me",
+        "tx.me",
+        "cdn-telegram.org",
+        "telegram-cdn.org",
+        "comments.app",
+        "contest.com",
+        "fragment.com",
+        "graph.org",
+        "quiz.directory",
+        "telesco.pe",
+        "tg.dev",
+        "ton.org",
+        "toncenter.com",
+        "usercontent.dev",
+        "apple.com",
+        "icloud.com",
+        "icloud-content.com",
+        "me.com",
+        "mzstatic.com",
+        "apple-cloudkit.com",
+        "apple-livephotoskit.com",
+        "cdn-apple.com",
+        "ampaeservices.com"
+      ],
+      "domain_keyword": [
+        "gemini",
+        "telegram"
+      ],
+      "ip_cidr": [
+        "91.108.4.0/22",
+        "91.108.56.0/22",
+        "149.154.160.0/20"
+      ]
+    }
+  ]
+}
