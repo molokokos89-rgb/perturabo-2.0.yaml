@@ -100,9 +100,9 @@ rule-providers:
   my-direct-rules:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/my_rules.yaml
+    url: https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/refs/heads/main/my_rules.yaml
     path: ./rules/my_rules.yaml
-    interval: 86400
+    interval: 14400
 
 rules:
   - DOMAIN-SUFFIX,adriver.ru,REJECT
