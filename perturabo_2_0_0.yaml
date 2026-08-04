@@ -116,7 +116,7 @@ proxy-providers:
       interval: 600
       timeout: 800
 
-nsfw-rules:
+  nsfw-rules:
     type: http
     behavior: domain
     url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
