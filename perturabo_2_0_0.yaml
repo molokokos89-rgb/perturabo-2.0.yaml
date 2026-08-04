@@ -8,6 +8,14 @@ bind-address: '*'
 mode: rule
 log-level: error
 ipv6: false
+sniffing:
+  enable: true
+  override-destination: true
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080]
 global-client-fingerprint: chrome
 keep-alive-idle: 30
 keep-alive-interval: 30
