@@ -161,5 +161,6 @@ rules:
   - RULE-SET,my-reject-rules,REJECT
   - RULE-SET,my-proxy-rules,VLESS-Auto
   - RULE-SET,nsfw-rules,VLESS-Auto
+  - PROCESS-NAME,Fallout76.exe,VLESS-Auto
   - RULE-SET,my-direct-rules,DIRECT
   - MATCH,VLESS-Auto
