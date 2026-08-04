@@ -53,8 +53,10 @@
         "apple-cloudkit.com",
         "apple-livephotoskit.com",
         "cdn-apple.com",
-        "ampaeservices.com"
-        "netflix.com"
+        "ampaeservices.com",
+        "netflix.com",
+        "facebook.com",
+        "meta.com"
       ],
       "domain_keyword": [
         "gemini",
