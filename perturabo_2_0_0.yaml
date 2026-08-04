@@ -19,11 +19,10 @@ dns:
   nameserver:
     - 9.9.9.9
     - 8.8.8.8
-    - 1.1.1.1
     - tls://9.9.9.9
     - tls://8.8.8.8
-    - tls://1.1.1.1
-    - https://1.1.1.1/dns-query
+    - https://dns.google/dns-query
+    - https://dns.quad9.net/dns-query
   fake-ip-filter:
     - '*.githubusercontent.com'
     - '*.github.com'
@@ -90,7 +89,7 @@ proxy-providers:
     type: http
     url: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt
     interval: 7200
-    path: ./vless_sub_2.yaml
+    path: ./vless_sub_3.yaml
     health-check:
       enable: true
       url: http://gstatic.com
@@ -109,88 +108,23 @@ proxy-groups:
       - vless-sub-3
 
 rule-providers:
+  my-proxy-rules:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/molokokos89-rgb/perturabo-2.0.yaml@main/my_rules_proxy.json"
+    path: ./rules/proxy.json
+    interval: 86400
+
   my-direct-rules:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/refs/heads/main/my_rules.json
-    path: ./rules/my_rules.yaml
-    interval: 14400
+    url: "https://cdn.jsdelivr.net/gh/molokokos89-rgb/perturabo-2.0.yaml@main/My_rules_RUS.json"
+    path: ./rules/direct.json
+    interval: 86400
 
 rules:
   - DOMAIN-SUFFIX,adriver.ru,REJECT
-  - DOMAIN-SUFFIX,carrotquest.io,REJECT
-  - DOMAIN-SUFFIX,appsflyer.com,REJECT
-  - DOMAIN-SUFFIX,appsflyersdk.com,REJECT
-  - DOMAIN-SUFFIX,adjust.com,REJECT
-  - DOMAIN-SUFFIX,crashlytics.com,REJECT
-  - DOMAIN-SUFFIX,amplitude.com,REJECT
-  - DOMAIN-SUFFIX,mytracker.ru,REJECT
-  - DOMAIN-SUFFIX,appmetrica.yandex.ru,REJECT
-  - DOMAIN-SUFFIX,mc.yandex.ru,REJECT
   - DOMAIN-SUFFIX,doubleclick.net,REJECT
-  - DOMAIN-SUFFIX,vk-analytics.ru,REJECT
-  - DOMAIN-KEYWORD,polaris,DIRECT
-  - DOMAIN-SUFFIX,polaris-iot.com,DIRECT
-  - DOMAIN-SUFFIX,vk.ru,DIRECT
-  - DOMAIN-SUFFIX,vk.com,DIRECT
-  - DOMAIN-SUFFIX,ru,DIRECT
-  - DOMAIN-SUFFIX,su,DIRECT
-  - DOMAIN-SUFFIX,xn--p1ai,DIRECT
+  - RULE-SET,my-proxy-rules,VLESS-Auto
   - RULE-SET,my-direct-rules,DIRECT
-  - DOMAIN-KEYWORD,gemini,VLESS-Auto
-  - DOMAIN-SUFFIX,google.com,VLESS-Auto
-  - DOMAIN-SUFFIX,googleapis.com,VLESS-Auto
-  - DOMAIN-SUFFIX,googleusercontent.com,VLESS-Auto
-  - DOMAIN-SUFFIX,gstatic.com,VLESS-Auto
-  - DOMAIN-SUFFIX,ggpht.com,VLESS-Auto
-  - DOMAIN-SUFFIX,g.co,VLESS-Auto
-  - DOMAIN-SUFFIX,googleanalytics.com,VLESS-Auto
-  - DOMAIN-SUFFIX,googletagmanager.com,VLESS-Auto
-  - DOMAIN-SUFFIX,googlesyndication.com,VLESS-Auto
-  - DOMAIN-SUFFIX,google-analytics.com,VLESS-Auto
-  - DOMAIN-SUFFIX,googleadservices.com,VLESS-Auto
-  - DOMAIN-SUFFIX,gvt1.com,VLESS-Auto
-  - DOMAIN-SUFFIX,gvt2.com,VLESS-Auto
-  - DOMAIN-SUFFIX,goo.gl,VLESS-Auto
-  - DOMAIN-SUFFIX,youtube.com,VLESS-Auto
-  - DOMAIN-SUFFIX,ytimg.com,VLESS-Auto
-  - DOMAIN-SUFFIX,googlelabs.com,VLESS-Auto
-  - DOMAIN-SUFFIX,github.com,VLESS-Auto
-  - DOMAIN-SUFFIX,githubusercontent.com,VLESS-Auto
-  - DOMAIN-SUFFIX,remanga.org,VLESS-Auto
-  - DOMAIN-KEYWORD,telegram,VLESS-Auto
-  - DOMAIN-SUFFIX,telegram.org,VLESS-Auto
-  - DOMAIN-SUFFIX,telegram.me,VLESS-Auto
-  - DOMAIN-SUFFIX,telegram.dog,VLESS-Auto
-  - DOMAIN-SUFFIX,telegram.space,VLESS-Auto
-  - DOMAIN-SUFFIX,tdesktop.org,VLESS-Auto
-  - DOMAIN-SUFFIX,tdesktop.com,VLESS-Auto
-  - DOMAIN-SUFFIX,telegra.ph,VLESS-Auto
-  - DOMAIN-SUFFIX,telega.one,VLESS-Auto
-  - DOMAIN-SUFFIX,t.me,VLESS-Auto
-  - DOMAIN-SUFFIX,tx.me,VLESS-Auto
-  - DOMAIN-SUFFIX,cdn-telegram.org,VLESS-Auto
-  - DOMAIN-SUFFIX,telegram-cdn.org,VLESS-Auto
-  - DOMAIN-SUFFIX,comments.app,VLESS-Auto
-  - DOMAIN-SUFFIX,contest.com,VLESS-Auto
-  - DOMAIN-SUFFIX,fragment.com,VLESS-Auto
-  - DOMAIN-SUFFIX,graph.org,VLESS-Auto
-  - DOMAIN-SUFFIX,quiz.directory,VLESS-Auto
-  - DOMAIN-SUFFIX,telesco.pe,VLESS-Auto
-  - DOMAIN-SUFFIX,tg.dev,VLESS-Auto
-  - DOMAIN-SUFFIX,ton.org,VLESS-Auto
-  - DOMAIN-SUFFIX,toncenter.com,VLESS-Auto
-  - DOMAIN-SUFFIX,usercontent.dev,VLESS-Auto
-  - IP-CIDR,91.108.4.0/22,VLESS-Auto
-  - IP-CIDR,91.108.56.0/22,VLESS-Auto
-  - IP-CIDR,149.154.160.0/20,VLESS-Auto
-  - DOMAIN-SUFFIX,apple.com,VLESS-Auto
-  - DOMAIN-SUFFIX,icloud.com,VLESS-Auto
-  - DOMAIN-SUFFIX,icloud-content.com,VLESS-Auto
-  - DOMAIN-SUFFIX,me.com,VLESS-Auto
-  - DOMAIN-SUFFIX,mzstatic.com,VLESS-Auto
-  - DOMAIN-SUFFIX,apple-cloudkit.com,VLESS-Auto
-  - DOMAIN-SUFFIX,apple-livephotoskit.com,VLESS-Auto
-  - DOMAIN-SUFFIX,cdn-apple.com,VLESS-Auto
-  - DOMAIN-SUFFIX,ampaeservices.com,VLESS-Auto
   - MATCH,VLESS-Auto
