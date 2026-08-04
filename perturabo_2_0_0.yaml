@@ -116,13 +116,6 @@ proxy-providers:
       interval: 600
       timeout: 800
 
-  nsfw-rules:
-    type: http
-    behavior: domain
-    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
-    path: ./rules/nsfw.yaml
-    interval: 86400
-
 proxy-groups:
   - name: VLESS-Auto
     type: fallback
@@ -143,6 +136,13 @@ rule-providers:
     path: ./rules/reject.json
     interval: 86400
 
+  nsfw-rules:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
+    path: ./rules/nsfw.yaml
+    interval: 86400
+
   my-proxy-rules:
     type: http
     behavior: classical
@@ -158,8 +158,7 @@ rule-providers:
     interval: 600
 
 rules:
-  - DOMAIN-SUFFIX,adriver.ru,REJECT
-  - DOMAIN-SUFFIX,doubleclick.net,REJECT
+  - RULE-SET,my-reject-rules,REJECT
   - RULE-SET,my-proxy-rules,VLESS-Auto
   - RULE-SET,nsfw-rules,VLESS-Auto
   - RULE-SET,my-direct-rules,DIRECT
