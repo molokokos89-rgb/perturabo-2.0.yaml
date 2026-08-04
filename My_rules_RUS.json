@@ -49,6 +49,8 @@
         "^rt\\."
       ],
       "domain_keyword": [
+        "launches-appsflyer",
+        "launches-appsflyersdk",
         "appsflyer",
         "appsflyersdk",
         "appmetrica",
