@@ -33,6 +33,8 @@ dns:
     - 'github.com'
     - '*.gstatic.com'
     - 'gstatic.com'
+    - '*appsflyersdk.com'
+    - '*appsflyer.com'
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
     - '*.boosty.to'
