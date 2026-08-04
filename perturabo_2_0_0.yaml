@@ -76,6 +76,8 @@ proxy-providers:
       enable: true
       url: http://gstatic.com
       interval: 600
+      timeout: 800
+
   vless-sub-2:
     type: http
     url: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/8a0ea60f714033c3ff85ab67f08d944fe2fe0776/BLACK_VLESS_RUS.txt
@@ -84,7 +86,9 @@ proxy-providers:
     health-check:
       enable: true
       url: http://gstatic.com
-      interval: 1200
+      interval: 600
+      timeout: 800
+
   vless-sub-3:
     type: http
     url: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt
@@ -93,15 +97,16 @@ proxy-providers:
     health-check:
       enable: true
       url: http://gstatic.com
-      interval: 1200
+      interval: 600
+      timeout: 800
 
 proxy-groups:
   - name: VLESS-Auto
-    type: url-test
+    type: fallback
     url: http://gstatic.com
-    interval: 300
-    tolerance: 300
-    lazy: false
+    interval: 600
+    timeout: 800
+    lazy: true
     use:
       - vless-sub-1
       - vless-sub-2
