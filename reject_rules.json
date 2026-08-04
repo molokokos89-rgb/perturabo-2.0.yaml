@@ -19,7 +19,8 @@
         "chartboost",
         "inmobi",
         "adcolony",
-        "mopub"
+        "mopub",
+        "wheelroot"
       ],
       "domain_suffix": [
         "adriver.ru",
@@ -37,7 +38,14 @@
         "adsafeprotected.com",
         "adnxs.com",
         "taboola.com",
-        "outbrain.com"
+        "outbrain.com",
+        "gdemoideti.ru",
+        "mobtop.com",
+        "uaas.yandex.ru",
+        "strip2.co",
+        "sacdnssedge.com",
+        "fishboardcrew.com",
+        "tettacrown.com"
       ]
     }
   ]
