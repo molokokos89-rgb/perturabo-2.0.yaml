@@ -8,6 +8,7 @@
       ],
       "domain_regex": [
         "^vk\\.",
+        "^appsflyersdk\\.",
         "^vk-",
         "^ya\\.",
         "^yandex\\.",
@@ -49,6 +50,7 @@
       ],
       "domain_keyword": [
         "appsflyer",
+        "appsflyersdk",
         "appmetrica",
         "yandex-metrika",
         "adjust",
