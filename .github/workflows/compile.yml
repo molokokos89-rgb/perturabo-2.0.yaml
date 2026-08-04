@@ -21,6 +21,7 @@ jobs:
       - name: Compile JSON to SRS
         run: |
           sing-box rule-set compile My_rules_RUS.json -o My_rules_RUS.srs
+          sing-box rule-set compile my_rules_proxy.json -o my_rules_proxy.srs
 
       - name: Commit and push compiled SRS
         run: |
