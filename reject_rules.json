@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain_keyword": [
+        "appsflyer",
+        "appsflyersdk",
+        "doubleclick",
+        "google-analytics",
+        "googletagmanager",
+        "googleadservices",
+        "appmetrica",
+        "pxltag",
+        "janusaent",
+        "unityads",
+        "applovin",
+        "ironsource",
+        "vungle",
+        "chartboost",
+        "inmobi",
+        "adcolony",
+        "mopub"
+      ],
+      "domain_suffix": [
+        "adriver.ru",
+        "mc.yandex.ru",
+        "onaego.com",
+        "stats.g.doubleclick.net",
+        "googleads.g.doubleclick.net",
+        "firebase-settings.crashlytics.com",
+        "report.appmetrica.yandex.net",
+        "an.yandex.ru",
+        "yandexads.com",
+        "ads.youtube.com",
+        "ad.mail.ru",
+        "my.target.com",
+        "adsafeprotected.com",
+        "adnxs.com",
+        "taboola.com",
+        "outbrain.com"
+      ]
+    }
+  ]
+}
