@@ -136,6 +136,12 @@ proxy-groups:
       - vless-sub-3
 
 rule-providers:
+  my-reject-rules:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/reject_rules.json"
+    path: ./rules/reject.json
+    interval: 86400
   my-proxy-rules:
     type: http
     behavior: classical
