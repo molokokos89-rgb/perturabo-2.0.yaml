@@ -85,7 +85,7 @@ dns:
 proxy-providers:
   vless-sub-1:
     type: http
-    url: "https://cdn.jsdelivr.net/gh/igareck/vpn-configs-for-russia@main/BLACK_SS%2BAll_RUS.txt"
+    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt"
     interval: 3600
     path: ./vless_sub_1.yaml
     health-check:
@@ -96,7 +96,7 @@ proxy-providers:
 
   vless-sub-2:
     type: http
-    url: "https://cdn.jsdelivr.net/gh/igareck/vpn-configs-for-russia@8a0ea60f714033c3ff85ab67f08d944fe2fe0776/BLACK_VLESS_RUS.txt"
+    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/8a0ea60f714033c3ff85ab67f08d944fe2fe0776/BLACK_VLESS_RUS.txt"
     interval: 7200
     path: ./vless_sub_2.yaml
     health-check:
@@ -107,7 +107,7 @@ proxy-providers:
 
   vless-sub-3:
     type: http
-    url: "https://cdn.jsdelivr.net/gh/igareck/vpn-configs-for-russia@main/BLACK_VLESS_RUS.txt"
+    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt"
     interval: 7200
     path: ./vless_sub_3.yaml
     health-check:
