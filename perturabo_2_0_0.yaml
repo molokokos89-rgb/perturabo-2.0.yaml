@@ -119,7 +119,7 @@ proxy-providers:
 nsfw-rules:
     type: http
     behavior: domain
-    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt" # или специализированный nsfw
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
     path: ./rules/nsfw.yaml
     interval: 86400
 
@@ -139,7 +139,7 @@ rule-providers:
   my-reject-rules:
     type: http
     behavior: classical
-    url: "https://github.com/molokokos89-rgb/perturabo-2.0.yaml/main/reject_rules.json"
+    url: "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/reject_rules.json"
     path: ./rules/reject.json
     interval: 86400
 
