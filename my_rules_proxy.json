@@ -2,8 +2,15 @@
   "version": 2,
   "rules": [
     {
+      "domain_keyword": [
+        "gemini",
+        "telegram",
+         "youtube"
+      ],
       "domain_suffix": [
+        "google.ru",
         "google.com",
+        "gemini.google.com",
         "googleapis.com",
         "googleusercontent.com",
         "gstatic.com",
@@ -61,10 +68,6 @@
         "netflix.com",
         "facebook.com",
         "meta.com"
-      ],
-      "domain_keyword": [
-        "gemini",
-        "telegram"
       ],
       "ip_cidr": [
         "91.108.4.0/22",
