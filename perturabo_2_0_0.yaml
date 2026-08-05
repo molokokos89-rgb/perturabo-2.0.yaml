@@ -87,9 +87,6 @@ proxy-providers:
     path: ./vless_sub_1.yaml
     health-check:
       enable: false
-      url: http://gstatic.com
-      interval: 300
-      timeout: 400
 
   vless-sub-2:
     type: http
@@ -97,10 +94,7 @@ proxy-providers:
     interval: 7200
     path: ./vless_sub_2.yaml
     health-check:
-      enable: true
-      url: http://gstatic.com
-      interval: 600
-      timeout: 800
+      enable: false
 
   vless-sub-3:
     type: http
@@ -108,20 +102,37 @@ proxy-providers:
     interval: 7200
     path: ./vless_sub_3.yaml
     health-check:
-      enable: true
-      url: http://gstatic.com
-      interval: 600
-      timeout: 800
+      enable: false
 
 proxy-groups:
   - name: VLESS-Auto
     type: fallback
-    url: http://gstatic.com
-    interval: 120
-    timeout: 500
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    timeout: 800
+    lazy: true
+    proxies:
+      - Main-Sub-Fastest
+      - Backup-Subs-Fastest
+
+  - name: Main-Sub-Fastest
+    type: urltest
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    timeout: 1000
+    tolerance: 150
     lazy: true
     use:
       - vless-sub-1
+
+  - name: Backup-Subs-Fastest
+    type: urltest
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    timeout: 1000
+    tolerance: 150
+    lazy: true
+    use:
       - vless-sub-2
       - vless-sub-3
 
@@ -131,14 +142,14 @@ rule-providers:
     behavior: classical
     url: "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/reject_rules.json"
     path: ./rules/reject.json
-    interval: 86400
+    interval: 21600
 
   nsfw-rules:
     type: http
     behavior: domain
     url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
     path: ./rules/nsfw.yaml
-    interval: 86400
+    interval: 21600
 
   my-proxy-rules:
     type: http
