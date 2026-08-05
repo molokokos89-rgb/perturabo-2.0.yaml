@@ -17,8 +17,8 @@ sniffing:
     HTTP:
       ports: [80, 8080]
 global-client-fingerprint: chrome
-keep-alive-idle: 30
-keep-alive-interval: 30
+keep-alive-idle: 15
+keep-alive-interval: 15
 tcp-concurrent: true
 
 dns:
@@ -41,10 +41,6 @@ dns:
     - 'github.com'
     - '*.gstatic.com'
     - 'gstatic.com'
-    - '*launches-appsflyersdk.com'
-    - '*launches-appsflyer.com'
-    - '*appsflyersdk.com'
-    - '*appsflyer.com'
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
     - '*.boosty.to'
@@ -53,6 +49,7 @@ dns:
     - '*.bitrix24.net'
     - '*.bitrix24.com'
     - '*.b24.ru'
+    - '*.b24.net'
     - '*.gosuslugi.ru'
     - '*.pgu.mos.ru'
     - '*.rostelecom.ru'
@@ -91,8 +88,8 @@ proxy-providers:
     health-check:
       enable: false
       url: http://gstatic.com
-      interval: 600
-      timeout: 800
+      interval: 300
+      timeout: 600
 
   vless-sub-2:
     type: http
@@ -122,7 +119,7 @@ proxy-groups:
     url: http://gstatic.com
     interval: 120
     timeout: 500
-    lazy: false
+    lazy: true
     use:
       - vless-sub-1
       - vless-sub-2
@@ -146,14 +143,14 @@ rule-providers:
   my-proxy-rules:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/molokokos89-rgb/perturabo-2.0.yaml@main/my_rules_proxy.json"
+    url: "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/my_rules_proxy.json"
     path: ./rules/proxy.json
     interval: 600
 
   my-direct-rules:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/molokokos89-rgb/perturabo-2.0.yaml@main/My_rules_RUS.json"
+    url: "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/My_rules_RUS.json"
     path: ./rules/direct.json
     interval: 600
 
