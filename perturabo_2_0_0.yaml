@@ -89,7 +89,7 @@ proxy-providers:
       enable: false
       url: http://gstatic.com
       interval: 300
-      timeout: 600
+      timeout: 400
 
   vless-sub-2:
     type: http
