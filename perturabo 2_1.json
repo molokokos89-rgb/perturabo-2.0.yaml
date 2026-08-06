@@ -1,143 +1,200 @@
 {
+  "port": 0,
+  "socks-port": 0,
+  "redir-port": 0,
+  "tproxy-port": 0,
+  "mixed-port": 7890,
+  "allow-lan": false,
+  "bind-address": "*",
   "mode": "rule",
-  "log-level": "info",
+  "log-level": "error",
   "ipv6": false,
-  "dns": {
+  "global-client-fingerprint": "chrome",
+  "keep-alive-idle": 15,
+  "keep-alive-interval": 15,
+  "tcp-concurrent": true,
+  "sniffing": {
     "enable": true,
-    "listen": "127.0.0.1:53",
-    "ipv6": false,
-    "enhanced-mode": "fake-ip",
-    "fake-ip-range": "198.18.0.0/15",
-    "fake-ip-filter": [
-      "*.lan",
-      "*.localdomain",
-      "*.example",
-      "*.invalid",
-      "*.localhost",
-      "*.test",
-      "*.local",
-      "*.home.arpa",
-      "time.*.com",
-      "time.*.gov",
-      "time.*.edu.cn",
-      "time.*.apple.com",
-      "time.nist.gov",
-      "time.windows.com",
-      "time.nts.net",
-      "nTP.msn.com",
-      "pool.ntp.org"
-    ],
-    "default-nameserver": [
-      "8.8.8.8",
-      "8.8.4.4",
-      "77.88.8.8",
-      "9.9.9.9"
-    ],
-    "nameserver": [
-      "https://dns.google/dns-query",
-      "https://dns.quad9.net/dns-query",
-      "https://dns.adguard-dns.com/dns-query",
-      "8.8.8.8",
-      "8.8.4.4",
-      "9.9.9.9"
-    ],
-    "fallback": [
-      "https://dns.google/dns-query",
-      "tls://8.8.8.8:853",
-      "tls://9.9.9.9:853"
-    ],
-    "fallback-filter": {
-      "geoip": true,
-      "geoip-code": "RU",
-      "ipcidr": [
-        "240.0.0.0/4"
-      ]
+    "override-destination": true,
+    "sniff": {
+      "TLS": {
+        "ports": [443, 8443]
+      },
+      "HTTP": {
+        "ports": [80, 8080]
+      }
     }
   },
+  "dns": {
+    "enable": true,
+    "enhanced-mode": "fake-ip",
+    "fake-ip-range": "198.18.0.1/16",
+    "respect-rules": true,
+    "direct-nameserver": [
+      "77.88.8.8",
+      "77.88.8.1",
+      "system"
+    ],
+    "nameserver": [
+      "77.88.8.8",
+      "77.88.8.1",
+      "tls://8.8.8.8",
+      "https://8.8.4.4/dns-query",
+      "9.9.9.9"
+    ],
+    "fake-ip-filter": [
+      "*.githubusercontent.com",
+      "*.github.com",
+      "github.com",
+      "*.gstatic.com",
+      "gstatic.com",
+      "*.nalog.ru",
+      "*.nalog.gov.ru",
+      "*.boosty.to",
+      "*.max.ru",
+      "*.bitrix24.ru",
+      "*.bitrix24.net",
+      "*.bitrix24.com",
+      "*.b24.ru",
+      "*.b24.net",
+      "*.gosuslugi.ru",
+      "*.pgu.mos.ru",
+      "*.rostelecom.ru",
+      "*.rt.ru",
+      "*.edu.ru",
+      "*.vk.com",
+      "*.vk.ru",
+      "*.vk.me",
+      "*.vk.net",
+      "*.vk.org",
+      "*.vk-cdn.net",
+      "*.yandex.ru",
+      "*.yandex.net",
+      "*.yandex.com",
+      "*.yandex.org",
+      "*.dzen.ru",
+      "*.yoomoney.ru",
+      "*.mail.ru",
+      "*.ok.ru",
+      "*.ru",
+      "*.su",
+      "*.xn--p1ai",
+      "*.by",
+      "*.org.ru",
+      "*.net.ru",
+      "*.pp.ru",
+      "*.pool.ntp.org",
+      "*.ntp.org"
+    ]
+  },
   "proxy-providers": {
-    "ss-main": {
+    "vless-sub-1": {
       "type": "http",
-      "url": "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS%2BAll_RUS.txt",
+      "url": "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt",
       "interval": 3600,
-      "path": "./ss_main.yaml",
+      "path": "./vless_sub_1.yaml",
+      "filter": "^(?!.*(?i)(anycast|fixnet|fixcord)).*",
       "health-check": {
-        "enable": true,
-        "url": "http://www.gstatic.com/generate_204",
-        "interval": 300
+        "enable": false
       }
     },
-    "vless-commit": {
+    "vless-sub-2": {
       "type": "http",
       "url": "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/8a0ea60f714033c3ff85ab67f08d944fe2fe0776/BLACK_VLESS_RUS.txt",
-      "interval": 3600,
-      "path": "./vless_commit.yaml",
+      "interval": 7200,
+      "path": "./vless_sub_2.yaml",
+      "filter": "^(?!.*(?i)(anycast|fixnet|fixcord)).*",
       "health-check": {
-        "enable": true,
-        "url": "http://www.gstatic.com/generate_204",
-        "interval": 300
+        "enable": false
       }
     },
-    "vless-main": {
+    "vless-sub-3": {
       "type": "http",
-      "url": "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_VLESS_RUS.txt",
-      "interval": 3600,
-      "path": "./vless_main.yaml",
+      "url": "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt",
+      "interval": 7200,
+      "path": "./vless_sub_3.yaml",
+      "filter": "^(?!.*(?i)(anycast|fixnet|fixcord)).*",
       "health-check": {
-        "enable": true,
-        "url": "http://www.gstatic.com/generate_204",
-        "interval": 300
+        "enable": false
       }
     }
   },
   "proxy-groups": [
     {
-      "name": "PROXY",
-      "type": "select",
+      "name": "VLESS-Auto",
+      "type": "fallback",
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": 300,
+      "timeout": 800,
+      "lazy": true,
+      "proxies": [
+        "Main-Sub-Fastest",
+        "Backup-Subs-Fastest"
+      ]
+    },
+    {
+      "name": "Main-Sub-Fastest",
+      "type": "urltest",
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": 600,
+      "timeout": 1000,
+      "tolerance": 150,
+      "lazy": true,
       "use": [
-        "ss-main",
-        "vless-commit",
-        "vless-main"
+        "vless-sub-1"
+      ]
+    },
+    {
+      "name": "Backup-Subs-Fastest",
+      "type": "urltest",
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": 600,
+      "timeout": 1000,
+      "tolerance": 150,
+      "lazy": true,
+      "use": [
+        "vless-sub-2",
+        "vless-sub-3"
       ]
     }
   ],
   "rule-providers": {
-    "reject_rules": {
+    "my-reject-rules": {
       "type": "http",
-      "behavior": "domain",
+      "behavior": "classical",
       "url": "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/reject_rules.json",
-      "path": "./rules/reject_rules.json",
-      "interval": 86400
+      "path": "./rules/reject.json",
+      "interval": 21600
     },
-    "my_rules_proxy": {
+    "nsfw-rules": {
       "type": "http",
       "behavior": "domain",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt",
+      "path": "./rules/nsfw.yaml",
+      "interval": 21600
+    },
+    "my-proxy-rules": {
+      "type": "http",
+      "behavior": "classical",
       "url": "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/my_rules_proxy.json",
-      "path": "./rules/my_rules_proxy.json",
-      "interval": 86400
+      "path": "./rules/proxy.json",
+      "interval": 600
     },
-    "my_rules_rus": {
+    "my-direct-rules": {
       "type": "http",
-      "behavior": "domain",
+      "behavior": "classical",
       "url": "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/My_rules_RUS.json",
-      "path": "./rules/my_rules_rus.json",
-      "interval": 86400
+      "path": "./rules/direct.json",
+      "interval": 600
     }
   },
   "rules": [
-    "RULE-SET,reject_rules,REJECT",
-    "RULE-SET,my_rules_proxy,PROXY",
-    "RULE-SET,my_rules_rus,DIRECT",
-    "DOMAIN,bag.itunes.apple.com,DIRECT",
-    "DOMAIN-SUFFIX,apple.com,DIRECT",
-    "DOMAIN-SUFFIX,cdn-apple.com,DIRECT",
-    "DOMAIN-SUFFIX,icloud.com,DIRECT",
-    "DOMAIN-SUFFIX,ru,DIRECT",
-    "DOMAIN-SUFFIX,su,DIRECT",
-    "DOMAIN-SUFFIX,rf,DIRECT",
-    "DOMAIN-SUFFIX,yandex.ru,DIRECT",
-    "DOMAIN-SUFFIX,vk.com,DIRECT",
-    "GEOIP,RU,DIRECT,no-resolve",
-    "GEOIP,LAN,DIRECT,no-resolve",
-    "MATCH,PROXY"
+    "RULE-SET,my-reject-rules,REJECT",
+    "RULE-SET,my-proxy-rules,VLESS-Auto",
+    "RULE-SET,nsfw-rules,VLESS-Auto",
+    "PROCESS-NAME,Fallout76.exe,VLESS-Auto",
+    "DOMAIN-SUFFIX,xn--p1ai,DIRECT",
+    "RULE-SET,my-direct-rules,DIRECT",
+    "MATCH,VLESS-Auto"
   ]
 }
