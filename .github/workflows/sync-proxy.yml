@@ -31,16 +31,14 @@ jobs:
           
           grep -v -i -E "Anycast-IP|fixnet|fixcord" raw_combined.txt > filtered.txt
           
-          sort -u filtered.txt | grep -E -v "^$" > clean.txt
+          sort -u filtered.txt | grep -E -v "^$" > proxy.txt
           
-          base64 -w 0 clean.txt > proxy.txt
-          
-          rm raw_combined.txt filtered.txt clean.txt
+          rm raw_combined.txt filtered.txt
 
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]@://github.com"
           
           git add proxy.txt
           git commit -m "update proxies" || echo "Nothing to commit"
