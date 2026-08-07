@@ -1,0 +1,180 @@
+port: 0
+socks-port: 0
+redir-port: 0
+tproxy-port: 0
+mixed-port: 7890
+allow-lan: false
+bind-address: '*'
+mode: rule
+log-level: error
+ipv6: false
+global-client-fingerprint: chrome
+keep-alive-idle: 15
+keep-alive-interval: 15
+tcp-concurrent: true
+
+sniffing:
+  enable: true
+  override-destination: true
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080]
+
+dns:
+  enable: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  respect-rules: true
+  direct-nameserver:
+    - 77.88.8.8
+    - 77.88.8.1
+    - system
+  nameserver:
+    - 77.88.8.8
+    - 77.88.8.1
+    - tls://8.8.8.8
+    - https://8.8.4.4/dns-query
+    - 9.9.9.9
+  fake-ip-filter:
+    - '*.githubusercontent.com'
+    - '*.github.com'
+    - 'github.com'
+    - '*.gstatic.com'
+    - 'gstatic.com'
+    - '*.nalog.ru'
+    - '*.nalog.gov.ru'
+    - '*.boosty.to'
+    - '*.max.ru'
+    - '*.bitrix24.ru'
+    - '*.bitrix24.net'
+    - '*.bitrix24.com'
+    - '*.b24.ru'
+    - '*.b24.net'
+    - '*.gosuslugi.ru'
+    - '*.pgu.mos.ru'
+    - '*.rostelecom.ru'
+    - '*.rt.ru'
+    - '*.edu.ru'
+    - '*.vk.com'
+    - '*.vk.ru'
+    - '*.vk.me'
+    - '*.vk.net'
+    - '*.vk.org'
+    - '*.vk-cdn.net'
+    - '*.yandex.ru'
+    - '*.yandex.net'
+    - '*.yandex.com'
+    - '*.yandex.org'
+    - '*.dzen.ru'
+    - '*.yoomoney.ru'
+    - '*.mail.ru'
+    - '*.ok.ru'
+    - '*.ru'
+    - '*.su'
+    - '*.xn--p1ai'
+    - '*.by'
+    - '*.org.ru'
+    - '*.net.ru'
+    - '*.pp.ru'
+    - '*.pool.ntp.org'
+    - '*.ntp.org'
+
+proxy-providers:
+  vless-sub-1:
+    type: http
+    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt"
+    interval: 3600
+    path: ./vless_sub_1.yaml
+    filter: "^(?!.*(?i)(anycast|fixnet|fixcord)).*"
+    health-check:
+      enable: false
+
+  vless-sub-2:
+    type: http
+    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/8a0ea60f714033c3ff85ab67f08d944fe2fe0776/BLACK_VLESS_RUS.txt"
+    interval: 7200
+    path: ./vless_sub_2.yaml
+    filter: "^(?!.*(?i)(anycast|fixnet|fixcord)).*"
+    health-check:
+      enable: false
+
+  vless-sub-3:
+    type: http
+    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt"
+    interval: 7200
+    path: ./vless_sub_3.yaml
+    filter: "^(?!.*(?i)(anycast|fixnet|fixcord)).*"
+    health-check:
+      enable: false
+
+proxy-groups:
+  - name: VLESS-Auto
+    type: fallback
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    timeout: 800
+    lazy: true
+    proxies:
+      - Main-Sub-Fastest
+      - Backup-Subs-Fastest
+
+  - name: Main-Sub-Fastest
+    type: urltest
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    timeout: 1000
+    tolerance: 150
+    lazy: true
+    use:
+      - vless-sub-1
+
+  - name: Backup-Subs-Fastest
+    type: urltest
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    timeout: 1000
+    tolerance: 150
+    lazy: true
+    use:
+      - vless-sub-2
+      - vless-sub-3
+
+rule-providers:
+  my-reject-rules:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/reject_rules.json"
+    path: ./rules/reject.json
+    interval: 21600
+
+  nsfw-rules:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
+    path: ./rules/nsfw.yaml
+    interval: 21600
+
+  my-proxy-rules:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/my_rules_proxy.json"
+    path: ./rules/proxy.json
+    interval: 600
+
+  my-direct-rules:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/My_rules_RUS.json"
+    path: ./rules/direct.json
+    interval: 600
+
+rules:
+  - RULE-SET,my-reject-rules,REJECT
+  - RULE-SET,my-proxy-rules,VLESS-Auto
+  - RULE-SET,nsfw-rules,VLESS-Auto
+  - PROCESS-NAME,Fallout76.exe,VLESS-Auto
+  - DOMAIN-SUFFIX,xn--p1ai,DIRECT
+  - RULE-SET,my-direct-rules,DIRECT
+  - MATCH,VLESS-Auto
