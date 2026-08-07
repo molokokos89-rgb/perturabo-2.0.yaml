@@ -1,4 +1,4 @@
-name: Sync and Filter Proxies for Karing
+name: Proxy Sync
 
 on:
   schedule:
@@ -43,12 +43,12 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@://github.com"
           
-          git add data/proxy.txt
+          git add data/proxy.yaml
           
           # Проверяем, есть ли что-то добавленное в индекс для коммита
           if git diff --cached --quiet; then
             echo "Изменений в прокси нет, пропускаем коммит."
           else
-            git commit -m "🤖 Обновление объединенной прокси-подписки: $(date -u +'%Y-%m-%d %H:%M:%S') UTC"
+            git commit -m "update proxies"
             git push
           fi
