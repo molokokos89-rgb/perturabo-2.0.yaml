@@ -1,0 +1,54 @@
+name: Sync and Filter Proxies for Karing
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-proxies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout local repository
+        uses: actions/checkout@v4
+
+      - name: Download, filter and format proxies
+        run: |
+          > raw_combined.txt
+          
+          curl -sL "https://githubusercontent.com\
+          2925f6dd917f7df83228aa9adbf8d634dc4847d8/BLACK_SS%2BAll_RUS.txt" >> raw_combined.txt
+          echo "" >> raw_combined.txt
+          
+          curl -sL "https://githubusercontent.com\
+          2925f6dd917f7df83228aa9adbf8d634dc4847d8/BLACK_VLESS_RUS.txt" >> raw_combined.txt
+          echo "" >> raw_combined.txt
+          
+          curl -sL "https://githubusercontent.com\
+          refs/heads/main/BLACK_VLESS_RUS_mobile.txt" >> raw_combined.txt
+          echo "" >> raw_combined.txt
+          
+          grep -v -i -E "Anycast-IP|fixnet|fixcord" raw_combined.txt > filtered.txt
+          
+          sort -u filtered.txt | grep -E -v "^$" > clean.txt
+          
+          base64 -w 0 clean.txt > proxy.txt
+          
+          rm raw_combined.txt filtered.txt clean.txt
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@://github.com"
+          
+          if git diff --exit-code proxy.txt; then
+            echo "Изменений в прокси нет, пропускаем коммит."
+          else
+            git add data/proxy.txt
+            git commit -m "🤖 Обновление объединенной прокси-подписки: $(date -u +'%Y-%m-%d %H:%M:%S') UTC"
+            git push
+          fi
