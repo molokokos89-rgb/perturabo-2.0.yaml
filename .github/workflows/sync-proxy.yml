@@ -2,7 +2,7 @@ name: Proxy Sync
 
 on:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -45,14 +45,8 @@ jobs:
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]@://github.com"
           
           git add data/proxy.yaml
-          
-          # Проверяем, изменился ли наш YAML-файл в репозитории
-          if git diff --quiet data/proxy.yaml; then
-            echo "No changes."
-          else
-            git commit -m "update proxies"
-            git push
-          fi
+          git commit -m "update proxies" || echo "Nothing to commit"
+          git push origin HEAD:${{ github.ref_name }}
