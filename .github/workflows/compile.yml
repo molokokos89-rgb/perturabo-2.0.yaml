@@ -20,13 +20,13 @@ jobs:
 
       - name: Compile JSON to YML
         run: |
-          sing-box rule-set compile My_rules_RUS.json -o My_rules_RUS.yml
-          sing-box rule-set compile my_rules_proxy.json -o my_rules_proxy.yml
+          sing-box rule-set compile My_rules_RUS.json -o My_rules_RUS.srs
+          sing-box rule-set compile my_rules_proxy.json -o my_rules_proxy.srs
 
       - name: Commit and push compiled YML
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add *.yml
+          git add *.srs
           git commit -m "Auto-compile all YML rule-sets" || exit 0
           git push
