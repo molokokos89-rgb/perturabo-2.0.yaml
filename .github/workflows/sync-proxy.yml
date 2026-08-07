@@ -35,9 +35,9 @@ jobs:
           
           mkdir -p data
           
-          echo "proxies:" > data/proxy.yaml
+          echo "proxies:" > data/proxy.txt
           while IFS= read -r line; do
-            echo "  - $line" >> data/proxy.yaml
+            echo "  - $line" >> data/proxy.txt
           done < clean.txt
           
           rm raw_combined.txt filtered.txt clean.txt
@@ -47,6 +47,6 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@://github.com"
           
-          git add data/proxy.yaml
+          git add data/proxy.txt
           git commit -m "update proxies" || echo "Nothing to commit"
           git push origin HEAD:${{ github.ref_name }}
