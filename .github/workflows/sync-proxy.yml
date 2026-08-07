@@ -22,13 +22,7 @@ jobs:
           
           curl -sL "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt" >> raw_combined.txt
           echo "" >> raw_combined.txt
-          
-          curl -sL "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt" >> raw_combined.txt
-          echo "" >> raw_combined.txt
-          
-          curl -sL "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS_mobile.txt" >> raw_combined.txt
-          echo "" >> raw_combined.txt
-          
+
           grep -v -i -E "Anycast-IP|fixnet|fixcord" raw_combined.txt > filtered.txt
           
           sort -u filtered.txt | grep -E -v "^$" > proxy.txt
