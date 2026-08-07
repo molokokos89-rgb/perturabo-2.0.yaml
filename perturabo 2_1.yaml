@@ -84,62 +84,31 @@ dns:
 proxy-providers:
   vless-sub-1:
     type: http
-    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt"
+    url: "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/data/proxy.yaml"
     interval: 3600
     path: ./vless_sub_1.yaml
-    filter: "^(?!.*(?i)(anycast|fixnet|fixcord)).*"
-    health-check:
-      enable: false
-
-  vless-sub-2:
-    type: http
-    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/8a0ea60f714033c3ff85ab67f08d944fe2fe0776/BLACK_VLESS_RUS.txt"
-    interval: 7200
-    path: ./vless_sub_2.yaml
-    filter: "^(?!.*(?i)(anycast|fixnet|fixcord)).*"
-    health-check:
-      enable: false
-
-  vless-sub-3:
-    type: http
-    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt"
-    interval: 7200
-    path: ./vless_sub_3.yaml
-    filter: "^(?!.*(?i)(anycast|fixnet|fixcord)).*"
     health-check:
       enable: false
 
 proxy-groups:
   - name: VLESS-Auto
-    type: fallback
+    type: urltest
     url: http://www.gstatic.com/generate_204
-    interval: 300
-    timeout: 800
-    lazy: true
+    interval: 600
+    timeout: 600
+    lazy: false
     proxies:
       - Main-Sub-Fastest
-      - Backup-Subs-Fastest
 
   - name: Main-Sub-Fastest
     type: urltest
     url: http://www.gstatic.com/generate_204
     interval: 600
-    timeout: 1000
-    tolerance: 150
-    lazy: true
+    timeout: 600
+    tolerance: 300
+    lazy: false
     use:
       - vless-sub-1
-
-  - name: Backup-Subs-Fastest
-    type: urltest
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    timeout: 1000
-    tolerance: 150
-    lazy: true
-    use:
-      - vless-sub-2
-      - vless-sub-3
 
 rule-providers:
   my-reject-rules:
