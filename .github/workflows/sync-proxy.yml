@@ -2,7 +2,7 @@ name: Sync and Filter Proxies for Karing
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 permissions:
@@ -29,7 +29,7 @@ jobs:
           curl -sL "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS_mobile.txt" >> raw_combined.txt
           echo "" >> raw_combined.txt
           
-          grep -v -i -E "Anycast-IP|fixnet|fixcord" raw_combined.txt > filtered.txt
+                   grep -v -i -E "Anycast-IP|fixnet|fixcord" raw_combined.txt > filtered.txt
           
           sort -u filtered.txt | grep -E -v "^$" > clean.txt
           
@@ -42,6 +42,13 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@://github.com"
+          
           git add data/proxy.txt
-          git commit -m "🤖 Обновление объединенной прокси-подписки: $(date -u +'%Y-%m-%d %H:%M:%S') UTC"
-          git push
+          
+          # Проверяем, есть ли что-то добавленное в индекс для коммита
+          if git diff --cached --quiet; then
+            echo "Изменений в прокси нет, пропускаем коммит."
+          else
+            git commit -m "🤖 Обновление объединенной прокси-подписки: $(date -u +'%Y-%m-%d %H:%M:%S') UTC"
+            git push
+          fi
