@@ -27,16 +27,14 @@ dns:
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   respect-rules: true
+  ipv6: false
   direct-nameserver:
     - 77.88.8.8
     - 77.88.8.1
-    - system
   nameserver:
-    - 77.88.8.8
-    - 77.88.8.1
+    - https://dns.google/dns-query
     - tls://8.8.8.8
-    - https://8.8.4.4/dns-query
-    - 9.9.9.9
+    - https://1.1.1.1/dns-query
   fake-ip-filter:
     - '*.githubusercontent.com'
     - '*.github.com'
@@ -133,6 +131,11 @@ rule-providers:
     interval: 600
 
 rules:
+  - DOMAIN,gemini.google.com,VLESS-Auto
+  - DOMAIN,aistudio.google.com,VLESS-Auto
+  - DOMAIN,generativelanguage.googleapis.com,VLESS-Auto
+  - DOMAIN,alkalimining-pa.googleapis.com,VLESS-Auto
+  - DOMAIN,proactivebackend-pa.googleapis.com,VLESS-Auto
   - RULE-SET,my-reject-rules,REJECT
   - RULE-SET,my-proxy-rules,VLESS-Auto
   - RULE-SET,nsfw-rules,VLESS-Auto
