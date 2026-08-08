@@ -1,13 +1,26 @@
 {
   "version": 2,
-  "rules": [
+   "rules": [
     {
+      "domain": [
+        "gstatic.gemini.com",
+        "gemini.google.com",
+        "aistudio.google.com",
+        "generativelanguage.googleapis.com",
+        "alkalimining-pa.googleapis.com",
+        "proactivebackend-pa.googleapis.com"[
+        
       "domain_keyword": [
         "gemini",
         "telegram",
         "youtube"
       ],
       "domain_suffix": [
+        "gemini.google.com",
+        "aistudio.google.com",
+        "generativelanguage.googleapis.com",
+        "alkalimining-pa.googleapis.com",
+        "proactivebackend-pa.googleapis.com"
         "google.ru",
         "google.com",
         "gemini.google.com",
