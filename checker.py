@@ -8,8 +8,11 @@ from concurrent.futures import ThreadPoolExecutor
 
 BAD_KEYWORDS = [
     "anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-",
-    "irc", "bot", "free", "pub"
+    "irc", "bot", "free", "pub", "google", "discord", "telegram",
+    "facebook", "instagram", "youtube"
 ]
+
+ALLOWED_PORTS = [443, 8443, 2053, 2083, 2096, 8080, 8443]
 
 def safe_b64decode(data):
     data = data.strip()
@@ -18,16 +21,20 @@ def safe_b64decode(data):
         data += '=' * (4 - missing_padding)
     return base64.b64decode(data).decode('utf-8', errors='ignore')
 
-def is_valid_vless(line):
-    line_lower = line.lower()
-    return any(sec in line_lower for sec in ["security=reality", "security=tls", "type=ws", "type=grpc"])
-
 def extract_host_port(line):
     line = line.strip()
     if not line:
         return None, None
     try:
-        if line.startswith("ss://"):
+        if line.startswith("vless://"):
+            part = line.split("://")[1].split("@")[1].split("?")[0].split("#")[0]
+            host, port = part.split(":")
+            return host, int(port)
+        elif line.startswith("trojan://"):
+            part = line.split("://")[1].split("@")[1].split("?")[0].split("#")[0]
+            host, port = part.split(":")
+            return host, int(port)
+        elif line.startswith("ss://"):
             part = line.split("://")[1].split("#")[0]
             if "@" in part:
                 host_port = part.split("@")[1]
@@ -37,24 +44,14 @@ def extract_host_port(line):
             hp = host_port.split("?")[0]
             host, port = hp.split(":")
             return host, int(port)
-
-        elif line.startswith("trojan://"):
-            part = line.split("://")[1].split("@")[1].split("?")[0].split("#")[0]
-            host, port = part.split(":")
-            return host, int(port)
-
-        elif line.startswith("vless://"):
-            if not is_valid_vless(line):
-                return None, None
-            part = line.split("://")[1].split("@")[1].split("?")[0].split("#")[0]
-            host, port = part.split(":")
-            return host, int(port)
     except Exception:
         return None, None
     return None, None
 
 def check_node(line):
-    if any(bad in line.lower() for bad in BAD_KEYWORDS):
+    line_lower = line.lower()
+    
+    if any(bad in line_lower for bad in BAD_KEYWORDS):
         return None
 
     host, port = extract_host_port(line)
@@ -93,7 +90,7 @@ def main():
             if res:
                 alive_nodes.append(res)
 
-    limited_lines = alive_nodes[:300]
+    limited_lines = alive_nodes[:200]
 
     raw_text = "\n".join(limited_lines)
     b64_output = base64.b64encode(raw_text.encode('utf-8')).decode('utf-8')
