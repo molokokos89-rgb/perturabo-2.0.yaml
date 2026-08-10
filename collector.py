@@ -5,7 +5,11 @@ SOURCES = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt",
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/normal/mix",
     "https://raw.githubusercontent.com/freefq/free/master/v2ray",
-    "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/All_Configs_Sub.txt"
+    "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/All_Configs_Sub.txt",
+    "https://raw.githubusercontent.com/soroushmirzaei/telegram-configs/main/sub/mix",
+    "https://raw.githubusercontent.com/ts-indexer/sub-collector/main/sub/mix",
+    "https://raw.githubusercontent.com/erfan-ahmadix/V2rayCollector/main/sub/mix",
+    "https://raw.githubusercontent.com/EbrahimAharghabi/v2ray-subscription/main/sub/mix"
 ]
 
 def fetch_url(url):
