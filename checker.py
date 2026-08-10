@@ -5,6 +5,13 @@ import base64
 
 BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-", "vless://"]
 
+def safe_b64decode(data):
+    data = data.strip()
+    missing_padding = len(data) % 4
+    if missing_padding:
+        data += '=' * (4 - missing_padding)
+    return base64.b64decode(data).decode('utf-8', errors='ignore')
+
 def extract_host(line):
     line = line.strip()
     if not line:
@@ -15,17 +22,17 @@ def extract_host(line):
             if "@" in part:
                 host_port = part.split("@")[1]
             else:
-                decoded = base64.b64decode(part + "==").decode('utf-8', errors='ignore')
+                decoded = safe_b64decode(part)
                 host_port = decoded.split("@")[1]
             return host_port.split(":")[0]
 
-        elif line.startswith("trojan://"):
+        elif line.startswith(("trojan://", "hy2://", "hysteria2://")):
             part = line.split("://")[1].split("@")[1]
             return part.split(":")[0].split("?")[0]
 
         elif line.startswith("vmess://"):
             b64_str = line.split("://")[1]
-            decoded = base64.b64decode(b64_str + "==").decode('utf-8', errors='ignore')
+            decoded = safe_b64decode(b64_str)
             data = json.loads(decoded)
             return data.get("add")
     except Exception:
@@ -33,8 +40,11 @@ def extract_host(line):
     return None
 
 def main():
-    with open("raw_combined.txt", "r", encoding="utf-8", errors="ignore") as f:
-        lines = f.readlines()
+    try:
+        with open("raw_combined.txt", "r", encoding="utf-8", errors="ignore") as f:
+            lines = f.readlines()
+    except Exception:
+        lines = []
 
     clean_lines = []
     for line in lines:
@@ -50,8 +60,12 @@ def main():
             clean_lines.append(line_str)
 
     unique_lines = sorted(list(set(clean_lines)))
+
+    raw_text = "\n".join(unique_lines)
+    b64_output = base64.b64encode(raw_text.encode('utf-8')).decode('utf-8')
+
     with open("proxy.txt", "w", encoding="utf-8") as f:
-        f.write("\n".join(unique_lines) + "\n")
+        f.write(b64_output)
 
 if __name__ == "__main__":
     main()
