@@ -12,6 +12,14 @@ def safe_b64decode(data):
         data += '=' * (4 - missing_padding)
     return base64.b64decode(data).decode('utf-8', errors='ignore')
 
+def is_valid_vless(line):
+    line_lower = line.lower()
+    has_security = any(sec in line_lower for sec in ["security=reality", "security=tls"])
+    has_transport = any(net in line_lower for net in ["type=ws", "type=grpc", "type=httpupgrade"])
+    if not (has_security or has_transport):
+        return False
+    return True
+
 def extract_host(line):
     line = line.strip()
     if not line:
@@ -26,7 +34,13 @@ def extract_host(line):
                 host_port = decoded.split("@")[1]
             return host_port.split(":")[0]
 
-        elif line.startswith("trojan://") or line.startswith("vless://"):
+        elif line.startswith("trojan://"):
+            part = line.split("://")[1].split("@")[1]
+            return part.split(":")[0].split("?")[0]
+
+        elif line.startswith("vless://"):
+            if not is_valid_vless(line):
+                return None
             part = line.split("://")[1].split("@")[1]
             return part.split(":")[0].split("?")[0]
 
@@ -43,11 +57,8 @@ def main():
     try:
         with open("raw_combined.txt", "r", encoding="utf-8", errors="ignore") as f:
             lines = f.readlines()
-    except Exception as e:
-        print(f"Ошибка чтения raw_combined.txt: {e}")
+    except Exception:
         lines = []
-
-    print(f"Всего строк собрано в raw_combined.txt: {len(lines)}")
 
     clean_lines = []
     for line in lines:
@@ -65,15 +76,11 @@ def main():
         except Exception:
             continue
 
-    print(f"Успешно отфильтровано и распознано хостов: {len(clean_lines)}")
-
     unique_lines = sorted(list(set(clean_lines)))
     limited_lines = unique_lines[:3000]
 
     with open("proxy.txt", "w", encoding="utf-8") as f:
         f.write("\n".join(limited_lines) + "\n")
-
-    print(f"Записано в proxy.txt: {len(limited_lines)} строк")
 
 if __name__ == "__main__":
     main()
