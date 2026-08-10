@@ -20,7 +20,7 @@ def safe_b64decode(data):
 
 def is_valid_vless(line):
     line_lower = line.lower()
-    return any(sec in line_lower for sec in ["security=reality", "security=tls"])
+    return any(sec in line_lower for sec in ["security=reality", "security=tls", "type=ws", "type=grpc"])
 
 def extract_host_port(line):
     line = line.strip()
@@ -64,7 +64,7 @@ def check_node(line):
     try:
         ip = socket.gethostbyname(host)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(0.8)
+        sock.settimeout(0.5)
         result = sock.connect_ex((ip, port))
         sock.close()
         if result == 0:
@@ -84,7 +84,7 @@ def main():
     
     random.seed(42)
     random.shuffle(lines)
-    sample_lines = lines[:2500]
+    sample_lines = lines[:3000]
 
     alive_nodes = []
     with ThreadPoolExecutor(max_workers=150) as executor:
@@ -93,7 +93,7 @@ def main():
             if res:
                 alive_nodes.append(res)
 
-    limited_lines = alive_nodes[:500]
+    limited_lines = alive_nodes[:300]
 
     raw_text = "\n".join(limited_lines)
     b64_output = base64.b64encode(raw_text.encode('utf-8')).decode('utf-8')
