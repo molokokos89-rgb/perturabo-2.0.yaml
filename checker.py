@@ -3,6 +3,8 @@ import re
 import json
 import base64
 import random
+import socket
+from concurrent.futures import ThreadPoolExecutor
 
 BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
 
@@ -17,10 +19,10 @@ def is_valid_vless(line):
     line_lower = line.lower()
     return "security=reality" in line_lower
 
-def extract_host(line):
+def extract_host_port(line):
     line = line.strip()
     if not line:
-        return None
+        return None, None
     try:
         if line.startswith("ss://"):
             part = line.split("://")[1].split("#")[0]
@@ -29,25 +31,48 @@ def extract_host(line):
             else:
                 decoded = safe_b64decode(part)
                 host_port = decoded.split("@")[1]
-            return host_port.split(":")[0]
+            hp = host_port.split("?")[0]
+            host, port = hp.split(":")
+            return host, int(port)
 
         elif line.startswith("trojan://"):
-            part = line.split("://")[1].split("@")[1]
-            return part.split(":")[0].split("?")[0]
+            part = line.split("://")[1].split("@")[1].split("?")[0].split("#")[0]
+            host, port = part.split(":")
+            return host, int(port)
 
         elif line.startswith("vless://"):
             if not is_valid_vless(line):
-                return None
-            part = line.split("://")[1].split("@")[1]
-            return part.split(":")[0].split("?")[0]
+                return None, None
+            part = line.split("://")[1].split("@")[1].split("?")[0].split("#")[0]
+            host, port = part.split(":")
+            return host, int(port)
 
         elif line.startswith("vmess://"):
             b64_str = line.split("://")[1]
             decoded = safe_b64decode(b64_str)
             data = json.loads(decoded)
-            return data.get("add")
+            return data.get("add"), int(data.get("port", 443))
     except Exception:
+        return None, None
+    return None, None
+
+def check_node(line):
+    if any(bad in line.lower() for bad in BAD_KEYWORDS):
         return None
+
+    host, port = extract_host_port(line)
+    if not host or not port:
+        return None
+
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(2.5)
+        result = sock.connect_ex((host, port))
+        sock.close()
+        if result == 0:
+            return line
+    except Exception:
+        pass
     return None
 
 def main():
@@ -57,26 +82,19 @@ def main():
     except Exception:
         lines = []
 
-    clean_lines = []
-    for line in lines:
-        try:
-            line_str = line.strip()
-            if not line_str:
-                continue
+    lines = [line.strip() for line in lines if line.strip()]
 
-            if any(bad in line_str.lower() for bad in BAD_KEYWORDS):
-                continue
+    alive_nodes = []
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        results = executor.map(check_node, lines)
+        for res in results:
+            if res:
+                alive_nodes.append(res)
 
-            host = extract_host(line_str)
-            if host:
-                clean_lines.append(line_str)
-        except Exception:
-            continue
-
-    unique_lines = list(set(clean_lines))
+    unique_lines = list(set(alive_nodes))
     random.seed(42)
     random.shuffle(unique_lines)
-    
+
     limited_lines = unique_lines[:500]
 
     raw_text = "\n".join(limited_lines)
