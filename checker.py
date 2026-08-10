@@ -6,7 +6,10 @@ import random
 import socket
 from concurrent.futures import ThreadPoolExecutor
 
-BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
+BAD_KEYWORDS = [
+    "anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-",
+    "irc", "bot", "free", "pub"
+]
 
 def safe_b64decode(data):
     data = data.strip()
@@ -17,7 +20,7 @@ def safe_b64decode(data):
 
 def is_valid_vless(line):
     line_lower = line.lower()
-    return "security=reality" in line_lower
+    return any(sec in line_lower for sec in ["security=reality", "security=tls"])
 
 def extract_host_port(line):
     line = line.strip()
@@ -46,12 +49,6 @@ def extract_host_port(line):
             part = line.split("://")[1].split("@")[1].split("?")[0].split("#")[0]
             host, port = part.split(":")
             return host, int(port)
-
-        elif line.startswith("vmess://"):
-            b64_str = line.split("://")[1]
-            decoded = safe_b64decode(b64_str)
-            data = json.loads(decoded)
-            return data.get("add"), int(data.get("port", 443))
     except Exception:
         return None, None
     return None, None
@@ -87,7 +84,7 @@ def main():
     
     random.seed(42)
     random.shuffle(lines)
-    sample_lines = lines[:2000]
+    sample_lines = lines[:2500]
 
     alive_nodes = []
     with ThreadPoolExecutor(max_workers=150) as executor:
