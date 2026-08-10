@@ -65,9 +65,10 @@ def check_node(line):
         return None
 
     try:
+        ip = socket.gethostbyname(host)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(2.5)
-        result = sock.connect_ex((host, port))
+        sock.settimeout(0.8)
+        result = sock.connect_ex((ip, port))
         sock.close()
         if result == 0:
             return line
@@ -82,20 +83,20 @@ def main():
     except Exception:
         lines = []
 
-    lines = [line.strip() for line in lines if line.strip()]
+    lines = list(set([line.strip() for line in lines if line.strip()]))
+    
+    random.seed(42)
+    random.shuffle(lines)
+    sample_lines = lines[:2000]
 
     alive_nodes = []
-    with ThreadPoolExecutor(max_workers=50) as executor:
-        results = executor.map(check_node, lines)
+    with ThreadPoolExecutor(max_workers=150) as executor:
+        results = executor.map(check_node, sample_lines)
         for res in results:
             if res:
                 alive_nodes.append(res)
 
-    unique_lines = list(set(alive_nodes))
-    random.seed(42)
-    random.shuffle(unique_lines)
-
-    limited_lines = unique_lines[:500]
+    limited_lines = alive_nodes[:500]
 
     raw_text = "\n".join(limited_lines)
     b64_output = base64.b64encode(raw_text.encode('utf-8')).decode('utf-8')
