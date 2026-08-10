@@ -11,11 +11,13 @@
         "proactivebackend-pa.googleapis.com"
       ],
       "domain_keyword": [
+        "browserleaks",
         "gemini",
         "telegram",
         "youtube"
       ],
       "domain_suffix": [
+        "browserleaks.com",
         "gemini.google.com",
         "aistudio.google.com",
         "generativelanguage.googleapis.com",
