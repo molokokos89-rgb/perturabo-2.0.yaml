@@ -43,8 +43,11 @@ def main():
     try:
         with open("raw_combined.txt", "r", encoding="utf-8", errors="ignore") as f:
             lines = f.readlines()
-    except Exception:
+    except Exception as e:
+        print(f"Ошибка чтения raw_combined.txt: {e}")
         lines = []
+
+    print(f"Всего строк собрано в raw_combined.txt: {len(lines)}")
 
     clean_lines = []
     for line in lines:
@@ -62,11 +65,15 @@ def main():
         except Exception:
             continue
 
+    print(f"Успешно отфильтровано и распознано хостов: {len(clean_lines)}")
+
     unique_lines = sorted(list(set(clean_lines)))
-    limited_lines = unique_lines[:10000]
+    limited_lines = unique_lines[:3000]
 
     with open("proxy.txt", "w", encoding="utf-8") as f:
         f.write("\n".join(limited_lines) + "\n")
+
+    print(f"Записано в proxy.txt: {len(limited_lines)} строк")
 
 if __name__ == "__main__":
     main()
