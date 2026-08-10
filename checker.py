@@ -3,7 +3,7 @@ import re
 import json
 import base64
 
-BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-", "vless://"]
+BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
 
 def extract_host(line):
     line = line.strip()
@@ -19,7 +19,7 @@ def extract_host(line):
                 host_port = decoded.split("@")[1]
             return host_port.split(":")[0]
 
-        elif line.startswith("trojan://"):
+        elif line.startswith("trojan://") or line.startswith("vless://"):
             part = line.split("://")[1].split("@")[1]
             return part.split(":")[0].split("?")[0]
 
