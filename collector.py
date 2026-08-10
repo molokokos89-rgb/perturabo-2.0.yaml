@@ -1,23 +1,9 @@
-import urllib.request
+import sys
+import re
+import json
 import base64
 
-SOURCES = [
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt",
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/VLESS_All_RUS.txt",
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt",
-    "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/vl.txt",
-    "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/vm.txt",
-    "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/tr.txt",
-    "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/ss.txt",
-    "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt",
-    "https://raw.githubusercontent.com/Au1rxx/free-vpn-subscriptions/main/output/v2ray-base64.txt",
-    "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/normal/mix",
-    "https://raw.githubusercontent.com/freefq/free/master/v2ray",
-    "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/All_Configs_Sub.txt",
-    "https://raw.githubusercontent.com/mftaw/V2ray-Configs/main/All_Configs_Sub.txt",
-    "https://raw.githubusercontent.com/soroushmirzaei/telegram-configs/main/sub/mix",
-    "https://raw.githubusercontent.com/erfan-ahmadix/V2rayCollector/main/sub/mix"
-]
+BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
 
 def safe_b64decode(data):
     data = data.strip()
@@ -26,33 +12,61 @@ def safe_b64decode(data):
         data += '=' * (4 - missing_padding)
     return base64.b64decode(data).decode('utf-8', errors='ignore')
 
-def fetch_url(url):
+def extract_host(line):
+    line = line.strip()
+    if not line:
+        return None
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=12) as response:
-            content = response.read().decode('utf-8', errors='ignore')
-            if not any(proto in content for proto in ["ss://", "vmess://", "trojan://", "vless://"]):
-                try:
-                    content = safe_b64decode(content)
-                except Exception:
-                    pass
-            return content
+        if line.startswith("ss://"):
+            part = line.split("://")[1].split("#")[0]
+            if "@" in part:
+                host_port = part.split("@")[1]
+            else:
+                decoded = safe_b64decode(part)
+                host_port = decoded.split("@")[1]
+            return host_port.split(":")[0]
+
+        elif line.startswith("trojan://") or line.startswith("vless://"):
+            part = line.split("://")[1].split("@")[1]
+            return part.split(":")[0].split("?")[0]
+
+        elif line.startswith("vmess://"):
+            b64_str = line.split("://")[1]
+            decoded = safe_b64decode(b64_str)
+            data = json.loads(decoded)
+            return data.get("add")
     except Exception:
-        return ""
+        return None
+    return None
 
 def main():
-    raw_nodes = []
-    for source in SOURCES:
-        data = fetch_url(source)
-        if data:
-            for line in data.splitlines():
-                line = line.strip()
-                if any(line.startswith(proto) for proto in ["ss://", "vmess://", "trojan://", "vless://"]):
-                    raw_nodes.append(line)
+    try:
+        with open("raw_combined.txt", "r", encoding="utf-8", errors="ignore") as f:
+            lines = f.readlines()
+    except Exception:
+        lines = []
 
-    unique_nodes = list(set(raw_nodes))
-    with open("raw_combined.txt", "w", encoding="utf-8") as f:
-        f.write("\n".join(unique_nodes) + "\n")
+    clean_lines = []
+    for line in lines:
+        try:
+            line_str = line.strip()
+            if not line_str:
+                continue
+
+            if any(bad in line_str.lower() for bad in BAD_KEYWORDS):
+                continue
+
+            host = extract_host(line_str)
+            if host:
+                clean_lines.append(line_str)
+        except Exception:
+            continue
+
+    unique_lines = sorted(list(set(clean_lines)))
+    limited_lines = unique_lines[:3000]
+
+    with open("proxy.txt", "w", encoding="utf-8") as f:
+        f.write("\n".join(limited_lines) + "\n")
 
 if __name__ == "__main__":
     main()
