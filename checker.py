@@ -2,7 +2,6 @@ import sys
 import re
 import json
 import base64
-import random
 
 BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
 
@@ -47,29 +46,24 @@ def main():
     except Exception:
         lines = []
 
-    clean_lines = []
+    seen_hosts = set()
+    unique_nodes = []
+
     for line in lines:
-        try:
-            line_str = line.strip()
-            if not line_str:
-                continue
-
-            if any(bad in line_str.lower() for bad in BAD_KEYWORDS):
-                continue
-
-            host = extract_host(line_str)
-            if host:
-                clean_lines.append(line_str)
-        except Exception:
+        line_str = line.strip()
+        if not line_str:
             continue
 
-    unique_lines = list(set(clean_lines))
-    random.seed(42)
-    random.shuffle(unique_lines)
+        if any(bad in line_str.lower() for bad in BAD_KEYWORDS):
+            continue
 
-    limited_lines = unique_lines[:3000]
+        host = extract_host(line_str)
+        
+        if host and host not in seen_hosts:
+            seen_hosts.add(host)
+            unique_nodes.append(line_str)
 
-    raw_text = "\n".join(limited_lines)
+    raw_text = "\n".join(unique_nodes)
     b64_output = base64.b64encode(raw_text.encode('utf-8')).decode('utf-8')
 
     with open("proxy.txt", "w", encoding="utf-8") as f:
