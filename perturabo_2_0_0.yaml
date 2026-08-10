@@ -8,6 +8,11 @@ bind-address: '*'
 mode: rule
 log-level: error
 ipv6: false
+global-client-fingerprint: chrome
+keep-alive-idle: 15
+keep-alive-interval: 15
+tcp-concurrent: true
+
 sniffing:
   enable: true
   override-destination: true
@@ -16,25 +21,23 @@ sniffing:
       ports: [443, 8443]
     HTTP:
       ports: [80, 8080]
-global-client-fingerprint: chrome
-keep-alive-idle: 15
-keep-alive-interval: 15
-tcp-concurrent: true
 
 dns:
   enable: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   respect-rules: true
+  ipv6: false
   direct-nameserver:
-    - system
+    - 77.88.8.8
+    - 77.88.8.1
   nameserver:
-    - 9.9.9.9
-    - 8.8.8.8
-    - tls://9.9.9.9
-    - tls://8.8.8.8
     - https://dns.google/dns-query
-    - https://dns.quad9.net/dns-query
+    - tls://8.8.8.8
+    - https://1.1.1.1/dns-query
+  proxy-server-nameserver:
+    - https://dns.google/dns-query
+    - https://1.1.1.1/dns-query
   fake-ip-filter:
     - '*.githubusercontent.com'
     - '*.github.com'
@@ -82,59 +85,24 @@ dns:
 proxy-providers:
   vless-sub-1:
     type: http
-    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt"
+    url: "https://raw.githubusercontent.com/molokokos89-rgb/perturabo-2.0.yaml/main/proxy.txt"
     interval: 3600
-    path: ./vless_sub_1.yaml
-    health-check:
-      enable: false
-
-  vless-sub-2:
-    type: http
-    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/8a0ea60f714033c3ff85ab67f08d944fe2fe0776/BLACK_VLESS_RUS.txt"
-    interval: 7200
-    path: ./vless_sub_2.yaml
-    health-check:
-      enable: false
-
-  vless-sub-3:
-    type: http
-    url: "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt"
-    interval: 7200
-    path: ./vless_sub_3.yaml
+    path: ./vless_sub_1.txt
+    ua: "clash"
     health-check:
       enable: false
 
 proxy-groups:
   - name: VLESS-Auto
-    type: fallback
+    type: urltest
     url: http://www.gstatic.com/generate_204
-    interval: 300
-    timeout: 800
-    lazy: true
+    interval: 600
+    timeout: 5000
+    lazy: false
+    tolerance: 300
+    idle-timeout: 1800
     proxies:
-      - Main-Sub-Fastest
-      - Backup-Subs-Fastest
-
-  - name: Main-Sub-Fastest
-    type: urltest
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    timeout: 1000
-    tolerance: 150
-    lazy: true
-    use:
       - vless-sub-1
-
-  - name: Backup-Subs-Fastest
-    type: urltest
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    timeout: 1000
-    tolerance: 150
-    lazy: true
-    use:
-      - vless-sub-2
-      - vless-sub-3
 
 rule-providers:
   my-reject-rules:
@@ -166,9 +134,16 @@ rule-providers:
     interval: 600
 
 rules:
+  - DOMAIN-SUFFIX,browserleaks.com,VLESS-Auto
+  - DOMAIN,gemini.google.com,VLESS-Auto
+  - DOMAIN,aistudio.google.com,VLESS-Auto
+  - DOMAIN,generativelanguage.googleapis.com,VLESS-Auto
+  - DOMAIN,alkalimining-pa.googleapis.com,VLESS-Auto
+  - DOMAIN,proactivebackend-pa.googleapis.com,VLESS-Auto
   - RULE-SET,my-reject-rules,REJECT
   - RULE-SET,my-proxy-rules,VLESS-Auto
   - RULE-SET,nsfw-rules,VLESS-Auto
   - PROCESS-NAME,Fallout76.exe,VLESS-Auto
+  - DOMAIN-SUFFIX,xn--p1ai,DIRECT
   - RULE-SET,my-direct-rules,DIRECT
   - MATCH,VLESS-Auto
