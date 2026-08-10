@@ -19,6 +19,13 @@ SOURCES = [
     "https://raw.githubusercontent.com/erfan-ahmadix/V2rayCollector/main/sub/mix"
 ]
 
+def safe_b64decode(data):
+    data = data.strip()
+    missing_padding = len(data) % 4
+    if missing_padding:
+        data += '=' * (4 - missing_padding)
+    return base64.b64decode(data).decode('utf-8', errors='ignore')
+
 def fetch_url(url):
     try:
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -26,7 +33,7 @@ def fetch_url(url):
             content = response.read().decode('utf-8', errors='ignore')
             if not any(proto in content for proto in ["ss://", "vmess://", "trojan://", "vless://"]):
                 try:
-                    content = base64.b64decode(content.strip()).decode('utf-8', errors='ignore')
+                    content = safe_b64decode(content)
                 except Exception:
                     pass
             return content
