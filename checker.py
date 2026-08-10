@@ -3,16 +3,8 @@ import re
 import json
 import base64
 import random
-import socket
-from concurrent.futures import ThreadPoolExecutor
 
-BAD_KEYWORDS = [
-    "anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-",
-    "irc", "bot", "free", "pub", "google", "discord", "telegram",
-    "facebook", "instagram", "youtube"
-]
-
-ALLOWED_PORTS = [443, 8443, 2053, 2083, 2096, 8080, 8443]
+BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
 
 def safe_b64decode(data):
     data = data.strip()
@@ -21,53 +13,31 @@ def safe_b64decode(data):
         data += '=' * (4 - missing_padding)
     return base64.b64decode(data).decode('utf-8', errors='ignore')
 
-def extract_host_port(line):
+def extract_host(line):
     line = line.strip()
     if not line:
-        return None, None
+        return None
     try:
-        if line.startswith("vless://"):
-            part = line.split("://")[1].split("@")[1].split("?")[0].split("#")[0]
-            host, port = part.split(":")
-            return host, int(port)
-        elif line.startswith("trojan://"):
-            part = line.split("://")[1].split("@")[1].split("?")[0].split("#")[0]
-            host, port = part.split(":")
-            return host, int(port)
-        elif line.startswith("ss://"):
+        if line.startswith("ss://"):
             part = line.split("://")[1].split("#")[0]
             if "@" in part:
                 host_port = part.split("@")[1]
             else:
                 decoded = safe_b64decode(part)
                 host_port = decoded.split("@")[1]
-            hp = host_port.split("?")[0]
-            host, port = hp.split(":")
-            return host, int(port)
+            return host_port.split(":")[0]
+
+        elif line.startswith("trojan://"):
+            part = line.split("://")[1].split("@")[1]
+            return part.split(":")[0].split("?")[0]
+
+        elif line.startswith("vmess://"):
+            b64_str = line.split("://")[1]
+            decoded = safe_b64decode(b64_str)
+            data = json.loads(decoded)
+            return data.get("add")
     except Exception:
-        return None, None
-    return None, None
-
-def check_node(line):
-    line_lower = line.lower()
-    
-    if any(bad in line_lower for bad in BAD_KEYWORDS):
         return None
-
-    host, port = extract_host_port(line)
-    if not host or not port:
-        return None
-
-    try:
-        ip = socket.gethostbyname(host)
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(0.5)
-        result = sock.connect_ex((ip, port))
-        sock.close()
-        if result == 0:
-            return line
-    except Exception:
-        pass
     return None
 
 def main():
@@ -77,20 +47,27 @@ def main():
     except Exception:
         lines = []
 
-    lines = list(set([line.strip() for line in lines if line.strip()]))
-    
+    clean_lines = []
+    for line in lines:
+        try:
+            line_str = line.strip()
+            if not line_str:
+                continue
+
+            if any(bad in line_str.lower() for bad in BAD_KEYWORDS):
+                continue
+
+            host = extract_host(line_str)
+            if host:
+                clean_lines.append(line_str)
+        except Exception:
+            continue
+
+    unique_lines = list(set(clean_lines))
     random.seed(42)
-    random.shuffle(lines)
-    sample_lines = lines[:3000]
+    random.shuffle(unique_lines)
 
-    alive_nodes = []
-    with ThreadPoolExecutor(max_workers=150) as executor:
-        results = executor.map(check_node, sample_lines)
-        for res in results:
-            if res:
-                alive_nodes.append(res)
-
-    limited_lines = alive_nodes[:200]
+    limited_lines = unique_lines[:3000]
 
     raw_text = "\n".join(limited_lines)
     b64_output = base64.b64encode(raw_text.encode('utf-8')).decode('utf-8')
