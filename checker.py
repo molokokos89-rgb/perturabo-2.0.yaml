@@ -14,11 +14,7 @@ def safe_b64decode(data):
 
 def is_valid_vless(line):
     line_lower = line.lower()
-    has_security = any(sec in line_lower for sec in ["security=reality", "security=tls"])
-    has_transport = any(net in line_lower for net in ["type=ws", "type=grpc", "type=httpupgrade"])
-    if not (has_security or has_transport):
-        return False
-    return True
+    return "security=reality" in line_lower
 
 def extract_host(line):
     line = line.strip()
@@ -77,7 +73,7 @@ def main():
             continue
 
     unique_lines = sorted(list(set(clean_lines)))
-    limited_lines = unique_lines[:3000]
+    limited_lines = unique_lines[:500]
 
     with open("proxy.txt", "w", encoding="utf-8") as f:
         f.write("\n".join(limited_lines) + "\n")
