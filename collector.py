@@ -3,9 +3,6 @@ import base64
 
 SOURCES = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt",
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/VLESS_All_RUS.txt",
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt",
-    "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/vl.txt",
     "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/vm.txt",
     "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/tr.txt",
     "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/ss.txt",
@@ -21,7 +18,7 @@ SOURCES = [
 
 def decode_text(text):
     text = text.strip()
-    if any(proto in text for proto in ["ss://", "vmess://", "trojan://", "vless://"]):
+    if any(proto in text for proto in ["ss://", "vmess://", "trojan://"]):
         return text
     try:
         missing_padding = len(text) % 4
@@ -51,7 +48,7 @@ def main():
         if data:
             for line in data.splitlines():
                 line = line.strip()
-                if any(line.startswith(proto) for proto in ["ss://", "vmess://", "trojan://", "vless://"]):
+                if any(line.startswith(proto) for proto in ["ss://", "vmess://", "trojan://"]):
                     raw_nodes.append(line)
 
     unique_nodes = list(set(raw_nodes))
