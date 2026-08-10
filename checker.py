@@ -2,6 +2,7 @@ import sys
 import re
 import json
 import base64
+import random
 
 BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
 
@@ -72,10 +73,12 @@ def main():
         except Exception:
             continue
 
-    unique_lines = sorted(list(set(clean_lines)))
+    unique_lines = list(set(clean_lines))
+    random.seed(42)
+    random.shuffle(unique_lines)
+    
     limited_lines = unique_lines[:500]
 
-    # Объединяем строки и кодируем весь текст в Base64
     raw_text = "\n".join(limited_lines)
     b64_output = base64.b64encode(raw_text.encode('utf-8')).decode('utf-8')
 
