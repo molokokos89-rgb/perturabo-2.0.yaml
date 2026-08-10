@@ -75,8 +75,12 @@ def main():
     unique_lines = sorted(list(set(clean_lines)))
     limited_lines = unique_lines[:500]
 
+    # Объединяем строки и кодируем весь текст в Base64
+    raw_text = "\n".join(limited_lines)
+    b64_output = base64.b64encode(raw_text.encode('utf-8')).decode('utf-8')
+
     with open("proxy.txt", "w", encoding="utf-8") as f:
-        f.write("\n".join(limited_lines) + "\n")
+        f.write(b64_output)
 
 if __name__ == "__main__":
     main()
