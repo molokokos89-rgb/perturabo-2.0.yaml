@@ -35,6 +35,9 @@ dns:
     - https://dns.google/dns-query
     - tls://8.8.8.8
     - https://1.1.1.1/dns-query
+  proxy-server-nameserver:
+    - https://dns.google/dns-query
+    - https://1.1.1.1/dns-query
   fake-ip-filter:
     - '*.githubusercontent.com'
     - '*.github.com'
@@ -131,6 +134,7 @@ rule-providers:
     interval: 600
 
 rules:
+  - DOMAIN-SUFFIX,browserleaks.com,VLESS-Auto
   - DOMAIN,gemini.google.com,VLESS-Auto
   - DOMAIN,aistudio.google.com,VLESS-Auto
   - DOMAIN,generativelanguage.googleapis.com,VLESS-Auto
