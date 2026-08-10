@@ -63,7 +63,7 @@ def main():
             continue
 
     unique_lines = sorted(list(set(clean_lines)))
-    limited_lines = unique_lines[:3000]
+    limited_lines = unique_lines[:50000]
 
     with open("proxy.txt", "w", encoding="utf-8") as f:
         f.write("\n".join(limited_lines) + "\n")
