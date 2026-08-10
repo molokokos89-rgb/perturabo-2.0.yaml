@@ -3,14 +3,7 @@ import re
 import json
 import base64
 
-BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
-
-def safe_b64decode(data):
-    data = data.strip()
-    missing_padding = len(data) % 4
-    if missing_padding:
-        data += '=' * (4 - missing_padding)
-    return base64.b64decode(data).decode('utf-8', errors='ignore')
+BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-", "vless://"]
 
 def extract_host(line):
     line = line.strip()
@@ -22,7 +15,7 @@ def extract_host(line):
             if "@" in part:
                 host_port = part.split("@")[1]
             else:
-                decoded = safe_b64decode(part)
+                decoded = base64.b64decode(part + "==").decode('utf-8', errors='ignore')
                 host_port = decoded.split("@")[1]
             return host_port.split(":")[0]
 
@@ -32,7 +25,7 @@ def extract_host(line):
 
         elif line.startswith("vmess://"):
             b64_str = line.split("://")[1]
-            decoded = safe_b64decode(b64_str)
+            decoded = base64.b64decode(b64_str + "==").decode('utf-8', errors='ignore')
             data = json.loads(decoded)
             return data.get("add")
     except Exception:
@@ -40,15 +33,10 @@ def extract_host(line):
     return None
 
 def main():
-    try:
-        with open("raw_combined.txt", "r", encoding="utf-8", errors="ignore") as f:
-            lines = f.readlines()
-    except Exception:
-        lines = []
+    with open("raw_combined.txt", "r", encoding="utf-8", errors="ignore") as f:
+        lines = f.readlines()
 
-    seen_hosts = set()
-    unique_nodes = []
-
+    clean_lines = []
     for line in lines:
         line_str = line.strip()
         if not line_str:
@@ -58,16 +46,12 @@ def main():
             continue
 
         host = extract_host(line_str)
-        
-        if host and host not in seen_hosts:
-            seen_hosts.add(host)
-            unique_nodes.append(line_str)
+        if host:
+            clean_lines.append(line_str)
 
-    raw_text = "\n".join(unique_nodes)
-    b64_output = base64.b64encode(raw_text.encode('utf-8')).decode('utf-8')
-
+    unique_lines = sorted(list(set(clean_lines)))
     with open("proxy.txt", "w", encoding="utf-8") as f:
-        f.write(b64_output)
+        f.write("\n".join(unique_lines) + "\n")
 
 if __name__ == "__main__":
     main()
