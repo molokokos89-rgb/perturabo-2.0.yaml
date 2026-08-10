@@ -16,18 +16,19 @@ jobs:
       - name: Checkout local repository
         uses: actions/checkout@v4
 
-      - name: Download, filter and format proxies
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Download raw proxies
         run: |
-          > raw_combined.txt
-          
-          curl -sL "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt" >> raw_combined.txt
-          echo "" >> raw_combined.txt
-          
-          grep -v -i -E "Anycast-IP|fixnet|fixcord|cloudflare|warp|cf-" raw_combined.txt > filtered.txt
-          
-          sort -u filtered.txt | grep -E -v "^$" > proxy.txt
-          
-          rm -f raw_combined.txt filtered.txt
+          curl -sL "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt" > raw_combined.txt
+
+      - name: Filter and generate clean proxy list
+        run: |
+          python checker.py
+          rm -f raw_combined.txt
 
       - name: Commit and Push changes
         run: |
