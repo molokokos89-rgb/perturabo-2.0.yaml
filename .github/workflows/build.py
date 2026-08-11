@@ -35,7 +35,6 @@ def fetch_external_domains(url):
         print(f"Error loading {url}: {e}")
     return domains
 
-# Читаем ваш оригинальный reject_rules.json
 data = load_json('reject_rules.json')
 rules = data.get('rules', [])
 
@@ -43,7 +42,6 @@ external_domains = set()
 for url in EXTERNAL_REJECT_URLS:
     external_domains.update(fetch_external_domains(url))
 
-# Если правила есть, дополняем их новыми доменами
 if rules:
     for rule in rules:
         existing_suffixes = set(rule.get('domain_suffix', []))
@@ -59,8 +57,7 @@ else:
 
 data['rules'] = rules
 
-# Сохраняем обратно в reject_rules.json
 with open('reject_rules.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, indent=2, ensure_ascii=False)
 
-print(f"reject_rules.json successfully updated! Added external domains.")
+print(f"reject_rules.json updated!")
