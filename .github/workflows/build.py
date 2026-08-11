@@ -7,12 +7,13 @@ EXTERNAL_REJECT_URLS = [
     "https://raw.githubusercontent.com/5kms/oisd-singbox/main/domain_suffix_reject.txt"
 ]
 
-def read_local_list(file_path):
+def load_json(file_path):
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
-            return [line.strip() for line in f if line.strip() and not line.startswith('#')]
-    except FileNotFoundError:
-        return []
+            return json.load(f)
+    except Exception as e:
+        print(f"Error reading {file_path}: {e}")
+        return {"version": 2, "rules": []}
 
 def fetch_external_domains(url):
     domains = set()
@@ -34,40 +35,32 @@ def fetch_external_domains(url):
         print(f"Error loading {url}: {e}")
     return domains
 
-rules = []
+# Читаем ваш оригинальный reject_rules.json
+data = load_json('reject_rules.json')
+rules = data.get('rules', [])
 
-direct_domains = read_local_list('direct.txt')
-if direct_domains:
-    rules.append({
-        "action": "direct",
-        "domain_suffix": sorted(list(set(direct_domains)))
-    })
-
-proxy_domains = read_local_list('proxy.txt')
-if proxy_domains:
-    rules.append({
-        "action": "proxy",
-        "domain_suffix": sorted(list(set(proxy_domains)))
-    })
-
-reject_domains = set(read_local_list('reject.txt'))
-
+external_domains = set()
 for url in EXTERNAL_REJECT_URLS:
-    ext_domains = fetch_external_domains(url)
-    reject_domains.update(ext_domains)
+    external_domains.update(fetch_external_domains(url))
 
-if reject_domains:
-    rules.append({
+# Если правила есть, дополняем их новыми доменами
+if rules:
+    for rule in rules:
+        existing_suffixes = set(rule.get('domain_suffix', []))
+        existing_suffixes.update(external_domains)
+        rule['domain_suffix'] = sorted(list(existing_suffixes))
+        if 'action' not in rule:
+            rule['action'] = 'reject'
+else:
+    rules = [{
         "action": "reject",
-        "domain_suffix": sorted(list(reject_domains))
-    })
+        "domain_suffix": sorted(list(external_domains))
+    }]
 
-config = {
-    "version": 2,
-    "rules": rules
-}
+data['rules'] = rules
 
-with open('my_rules.json', 'w', encoding='utf-8') as f:
-    json.dump(config, f, indent=2, ensure_ascii=False)
+# Сохраняем обратно в reject_rules.json
+with open('reject_rules.json', 'w', encoding='utf-8') as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
 
-print(f"Done! REJECT contains {len(reject_domains)} domains.")
+print(f"reject_rules.json successfully updated! Added external domains.")
