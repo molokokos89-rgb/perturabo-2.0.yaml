@@ -341,6 +341,7 @@
         "applifier.com",
         "applift.com",
         "applovin.com",
+        "appmetrica.yandex.net",
         "appnext-a.akamaihd.net",
         "appnext.hs.llnwd.net",
         "appodeal.com",
@@ -590,6 +591,7 @@
         "iadsdk.apple.com",
         "iam.datasavannah.com",
         "ichannel.isnssdk.com",
+        "ident.me",
         "im.ov.yahoo.co.jp",
         "imapi-sg.isnssdk.com",
         "imgx.jampp.com",
@@ -1031,6 +1033,7 @@
         "yieldmo.com",
         "ykad-data.youku.com",
         "yllix.com",
+        "ym68ejbdzn.ru",
         "yodo1.com",
         "youmi.net",
         "yovoads.com",
@@ -1040,10 +1043,7 @@
         "zmqdez.ru",
         "zoly.tech",
         "zxphiz.tech",
-        "zzhengre.com",
-        "ym68ejbdzn.ru",
-        "ident.me",
-        "appmetrica.yandex.net"
+        "zzhengre.com"
       ]
     }
   ]
