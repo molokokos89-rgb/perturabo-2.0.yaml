@@ -4,6 +4,18 @@
     {
       "action": "reject",
       "domain_suffix": [
+        "*.vk-analytics.ru",
+        "ads.adfox.ru",
+        "ad.mail.ru",
+        "alt-ad.mail.ru",
+        "rs.mail.ru",
+        "m.mradx.net",
+        "mc.yandex.ru",
+        "report.appmetrica.yandex.net",
+        "tracker-api.vk-analytics.ru",
+        "ip4.tracker-api.vk-analytics.ru",
+        "ts.tracker-api.vk-analytics.ru",
+        "sdk-api.apptracer.ru",
         "*.libaishuo.com",
         "-adx-*.rayjump.com",
         "023hysj.com",
