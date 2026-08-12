@@ -34,8 +34,8 @@ dns:
   nameserver:
     - https://mama-medved-777.molokokos89.workers.dev/dns-query
   proxy-server-nameserver:
-    - 77.88.8.8
-    - 77.88.8.1
+    - 8.8.8.8
+    - 8.8.4.4
   fake-ip-filter:
     - '*.githubusercontent.com'
     - '*.github.com'
