@@ -32,12 +32,10 @@ dns:
     - 77.88.8.8
     - 77.88.8.1
   nameserver:
-    - https://dns.google/dns-query
-    - tls://8.8.8.8
-    - https://1.1.1.1/dns-query
+    - https://mama-medved-777.molokokos89.workers.dev/dns-query
   proxy-server-nameserver:
-    - https://dns.google/dns-query
-    - https://1.1.1.1/dns-query
+    - 77.88.8.8
+    - 77.88.8.1
   fake-ip-filter:
     - '*.githubusercontent.com'
     - '*.github.com'
@@ -134,16 +132,18 @@ rule-providers:
     interval: 600
 
 rules:
+  - RULE-SET,my-reject-rules,REJECT
+  - DOMAIN-SUFFIX,xn--p1ai,DIRECT
+  - DOMAIN-SUFFIX,ru,DIRECT
+  - DOMAIN-SUFFIX,su,DIRECT
+  - RULE-SET,my-direct-rules,DIRECT
   - DOMAIN-SUFFIX,browserleaks.com,VLESS-Auto
   - DOMAIN,gemini.google.com,VLESS-Auto
   - DOMAIN,aistudio.google.com,VLESS-Auto
   - DOMAIN,generativelanguage.googleapis.com,VLESS-Auto
   - DOMAIN,alkalimining-pa.googleapis.com,VLESS-Auto
   - DOMAIN,proactivebackend-pa.googleapis.com,VLESS-Auto
-  - RULE-SET,my-reject-rules,REJECT
+  - PROCESS-NAME,Fallout76.exe,VLESS-Auto
   - RULE-SET,my-proxy-rules,VLESS-Auto
   - RULE-SET,nsfw-rules,VLESS-Auto
-  - PROCESS-NAME,Fallout76.exe,VLESS-Auto
-  - DOMAIN-SUFFIX,xn--p1ai,DIRECT
-  - RULE-SET,my-direct-rules,DIRECT
   - MATCH,VLESS-Auto
