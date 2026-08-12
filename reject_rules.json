@@ -24,7 +24,6 @@
         "wheelroot"
       ],
       "domain_suffix": [
-        "ads.adfox.ru",
         "*.libaishuo.com",
         "-adx-*.rayjump.com",
         "023hysj.com",
@@ -185,6 +184,7 @@
         "ads-static.phonepe.com",
         "ads.ad2iction.com",
         "ads.adadapted.com",
+        "ads.adfox.ru",
         "ads.adinmotech.com",
         "ads.aerserv.com",
         "ads.aitype.net",
