@@ -1,4 +1,4 @@
-name: Proxy Sync Test
+name: Test Proxy Sync
 
 on:
   workflow_dispatch:
@@ -7,9 +7,8 @@ permissions:
   contents: write
 
 jobs:
-  test-proxies:
+  update-proxies:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout local repository
         uses: actions/checkout@v4
@@ -23,16 +22,15 @@ jobs:
         run: |
           python collector.py
 
-      - name: Filter and generate test proxy list
+      - name: Filter and generate clean proxy list
         run: |
           python checker_test.py
-          rm -f raw_combined.txt
+          rm -f raw_combined.txt proxy_test.txt checker_test.py
 
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
-          git add proxy_test.txt
-          git commit -m "test update proxy_test.txt" || echo "Nothing to commit"
+          git config --global user.email "41898282+github-actions[bot]@://github.com"
+          git add proxy.txt ru_nodes.txt My_rules_BLOCKED_test.txt
+          git commit -m "test auto-update clean proxies and text rulesets" --allow-empty
           git push origin HEAD:${{ github.ref_name }}
