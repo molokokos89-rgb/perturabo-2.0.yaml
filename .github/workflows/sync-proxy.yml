@@ -39,11 +39,16 @@ jobs:
           sing-box rule-set compile blocked.json --output My_rules_BLOCKED.srs
           sing-box rule-set compile allowed.json --output My_rules_ALLOWED.srs
 
-      - name: Commit and Push changes
+      - name: Install Sing-box Compiler
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm -f proxy_test.txt checker_test.py || true
-          git add proxy.txt ru_nodes.txt blocked.json allowed.json My_rules_BLOCKED.srs My_rules_ALLOWED.srs
-          git commit -m "auto-update clean proxies and unified rulesets" --allow-empty
-          git push origin HEAD:${{ github.ref_name }}
+          sudo mkdir -p /etc/apt/keyrings
+          sudo curl -fsSL https://sing-box.app/gpg.key -o /etc/apt/keyrings/sagernet.asc || sudo curl -fsSL https://githubusercontent.com -o /etc/apt/keyrings/sagernet.asc
+          sudo chmod a+r /etc/apt/keyrings/sagernet.asc
+          echo "Types: deb
+          URIs: https://deb.sagernet.org/
+          Suites: *
+          Components: *
+          Enabled: yes
+          Signed-By: /etc/apt/keyrings/sagernet.asc" | sudo tee /etc/apt/sources.list.d/sagernet.sources
+          sudo apt-get update
+          sudo apt-get install sing-box -y
