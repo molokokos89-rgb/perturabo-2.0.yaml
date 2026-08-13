@@ -39,16 +39,9 @@ jobs:
           sing-box rule-set compile blocked.json --output My_rules_BLOCKED.srs
           sing-box rule-set compile allowed.json --output My_rules_ALLOWED.srs
 
-      - name: Install Sing-box Compiler
+           - name: Install Sing-box Compiler
         run: |
-          sudo mkdir -p /etc/apt/keyrings
-          sudo curl -fsSL https://sing-box.app/gpg.key -o /etc/apt/keyrings/sagernet.asc || sudo curl -fsSL https://githubusercontent.com -o /etc/apt/keyrings/sagernet.asc
-          sudo chmod a+r /etc/apt/keyrings/sagernet.asc
-          echo "Types: deb
-          URIs: https://deb.sagernet.org/
-          Suites: *
-          Components: *
-          Enabled: yes
-          Signed-By: /etc/apt/keyrings/sagernet.asc" | sudo tee /etc/apt/sources.list.d/sagernet.sources
-          sudo apt-get update
-          sudo apt-get install sing-box -y
+          curl -Lo sing-box.tar.gz https://github.com
+          tar -xzf sing-box.tar.gz
+          sudo mv sing-box-1.11.0-alpha.5-linux-amd64/sing-box /usr/local/bin/
+          rm -rf sing-box.tar.gz sing-box-1.11.0-alpha.5-linux-amd64
