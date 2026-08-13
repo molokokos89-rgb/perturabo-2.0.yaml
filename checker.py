@@ -8,7 +8,7 @@ import urllib.parse
 import subprocess
 import os
 
-BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-", "vless://"]
+BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
 
 def safe_b64decode(data):
     data = data.strip()
@@ -127,6 +127,8 @@ def main():
     for line in lines:
         line_str = line.strip()
         if not line_str:
+            continue
+        if line_str.startswith("vless://"):
             continue
         if any(bad in line_str.lower() for bad in BAD_KEYWORDS):
             continue
