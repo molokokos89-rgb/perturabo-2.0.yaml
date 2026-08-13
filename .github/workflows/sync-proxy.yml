@@ -11,10 +11,14 @@ permissions:
 jobs:
   update-proxies:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout local repository
         uses: actions/checkout@v4
+
+      - name: Install Sing-box Compiler
+        run: |
+          sudo bash -c "$(curl -fsSL https://sing-box.app)"
+          sudo apt-get install sing-box -y
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,12 +34,16 @@ jobs:
           python checker.py
           rm -f raw_combined.txt proxy_test.txt checker_test.py
 
+      - name: Compile Unified Rulesets to SRS
+        run: |
+          sing-box rule-set compile blocked.json --output My_rules_BLOCKED.srs
+          sing-box rule-set compile allowed.json --output My_rules_ALLOWED.srs
+
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
           git rm -f proxy_test.txt checker_test.py || true
-          git add proxy.txt
-          git commit -m "auto-update clean proxies" || echo "Nothing to commit"
+          git add proxy.txt ru_nodes.txt blocked.json allowed.json My_rules_BLOCKED.srs My_rules_ALLOWED.srs
+          git commit -m "auto-update clean proxies and unified rulesets" --allow-empty
           git push origin HEAD:${{ github.ref_name }}
