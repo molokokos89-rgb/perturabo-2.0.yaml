@@ -37,11 +37,6 @@ dns:
     - 8.8.8.8
     - 8.8.4.4
   fake-ip-filter:
-    - '*.githubusercontent.com'
-    - '*.github.com'
-    - 'github.com'
-    - '*.gstatic.com'
-    - 'gstatic.com'
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
     - '*.boosty.to'
