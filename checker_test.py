@@ -84,7 +84,7 @@ def load_domains_from_sources():
     for d in all_extracted:
         if not isinstance(d, str): continue
         d_clean = d.strip().split(",")[-1] if "," in d else d.strip()
-        d_clean = d_clean.replace("+.", "").replace(".", "")
+        d_clean = d_clean.replace("+.", "")
         if d_clean and "." in d_clean and len(d_clean) > 3:
             clean_domains.add(d_clean.lower())
 
@@ -120,5 +120,5 @@ def main():
     with open("My_rules_BLOCKED_test.txt", "w", encoding="utf-8") as f:
         f.write("\n".join(blocked_list) + "\n")
 
-if __name__ == "__main__":
+ if __name__ == "__main__":
     main()
