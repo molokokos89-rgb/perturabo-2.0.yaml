@@ -32,21 +32,29 @@ def fetch_external_domains(url, index):
                 with open(srs_file, "wb") as out:
                     out.write(response.read())
             
-            subprocess.run(["sing-box", "rule-set", "decompile", srs_file, "--output", json_file], check=True)
-            
+            try:
+                res = subprocess.run(
+                    ["sing-box", "rule-set", "decompile", srs_file, "--output", json_file],
+                    capture_output=True,
+                    text=True
+                )
+                if res.returncode == 0 and os.path.exists(json_file):
+                    with open(json_file, "r", encoding="utf-8") as jf:
+                        data = json.load(jf)
+                        for rule in data.get("rules", []):
+                            if "domain" in rule:
+                                domains.update(rule["domain"])
+                            if "domain_suffix" in rule:
+                                domains.update(rule["domain_suffix"])
+                            if "domain_keyword" in rule:
+                                domains.update(rule["domain_keyword"])
+            except Exception as decomp_err:
+                print(f"Error decompiling SRS {url}: {decomp_err}")
+
+            if os.path.exists(srs_file):
+                os.remove(srs_file)
             if os.path.exists(json_file):
-                with open(json_file, "r", encoding="utf-8") as jf:
-                    data = json.load(jf)
-                    for rule in data.get("rules", []):
-                        if "domain" in rule:
-                            domains.update(rule["domain"])
-                        if "domain_suffix" in rule:
-                            domains.update(rule["domain_suffix"])
-                        if "domain_keyword" in rule:
-                            domains.update(rule["domain_keyword"])
-            
-            if os.path.exists(srs_file): os.remove(srs_file)
-            if os.path.exists(json_file): os.remove(json_file)
+                os.remove(json_file)
             
         else:
             with urllib.request.urlopen(req, timeout=10) as response:
@@ -87,4 +95,31 @@ for item in external_items:
 if 'rules' in data and data['rules']:
     for rule in data['rules']:
         if 'domain_suffix' in rule:
-            for item in rule
+            for item in rule['domain_suffix']:
+                item_clean = item.strip().replace("`", "").replace("*.", "")
+                if ip_pattern.match(item_clean):
+                    final_ips.add(f"{item_clean}/32")
+                else:
+                    final_domains.add(item_clean)
+                    
+        if 'ip_cidr' in rule:
+            for item in rule['ip_cidr']:
+                item_clean = item.strip().replace("`", "")
+                if '/' in item_clean:
+                    final_ips.add(item_clean)
+                elif ip_pattern.match(item_clean):
+                    final_ips.add(f"{item_clean}/32")
+
+rule_dict = {}
+if final_domains:
+    rule_dict["domain_suffix"] = sorted(list(final_domains))
+if final_ips:
+    rule_dict["ip_cidr"] = sorted(list(final_ips))
+
+data['version'] = 1
+data['rules'] = [rule_dict] if rule_dict else []
+
+with open('reject_rules.json', 'w', encoding='utf-8') as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
+
+print(f"reject_rules.json updated successfully! Total domains: {len(final_domains)}, IPs: {len(final_ips)}")
