@@ -120,5 +120,5 @@ def main():
     with open("My_rules_BLOCKED_test.txt", "w", encoding="utf-8") as f:
         f.write("\n".join(blocked_list) + "\n")
 
- if __name__ == "__main__":
+if __name__ == "__main__":
     main()
