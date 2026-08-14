@@ -5,10 +5,10 @@ import os
 import subprocess
 
 EXTERNAL_REJECT_URLS = [
-    "https://raw.githubusercontent.com/AdguardTeam/AdguardFilters/master/MobileFilter/sections/adservers.txt",
-    "https://raw.githubusercontent.com/5kms/oisd-singbox/main/domain_suffix_reject.txt",
-    "https://github.com/KaringX/karing-ruleset/raw/refs/heads/sing/russia/runetfreedom/sing-box/rule-set-geosite/geosite-adblock.srs",
-    "https://github.com/KaringX/karing-ruleset/raw/refs/heads/sing/russia/runetfreedom/sing-box/rule-set-geosite/geosite-adblockplus.srs"
+    "https://githubusercontent.com",
+    "https://githubusercontent.com",
+    "https://github.com",
+    "https://github.com"
 ]
 
 def load_json(file_path):
@@ -17,7 +17,7 @@ def load_json(file_path):
             return json.load(f)
     except Exception as e:
         print(f"Error reading {file_path}: {e}")
-        return {"version": 2, "rules": []}
+        return {"version": 1, "rules": []}
 
 def fetch_external_domains(url, index):
     domains = set()
@@ -84,24 +84,17 @@ if 'rules' in data and data['rules']:
         if 'ip_cidr' in rule:
             final_ips.update(rule['ip_cidr'])
 
-new_rules = []
-
+# Собираем строго под синтаксис Версии 1 (один общий блок правил)
+rule_dict = {}
 if final_domains:
-    new_rules.append({
-        "action": "reject",
-        "domain_suffix": sorted(list(final_domains))
-    })
-
+    rule_dict["domain_suffix"] = sorted(list(final_domains))
 if final_ips:
-    new_rules.append({
-        "action": "reject",
-        "ip_cidr": sorted(list(final_ips))
-    })
+    rule_dict["ip_cidr"] = sorted(list(final_ips))
 
-data['version'] = 2
-data['rules'] = new_rules
+data['version'] = 1
+data['rules'] = [rule_dict] if rule_dict else []
 
 with open('reject_rules.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, indent=2, ensure_ascii=False)
 
-print(f"reject_rules.json updated and structured correctly!")
+print(f"reject_rules.json updated successfully in version 1 format!")
