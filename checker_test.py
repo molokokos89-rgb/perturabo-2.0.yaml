@@ -50,63 +50,45 @@ def process_extracted_items(items, target_list):
 
 def load_domains_from_sources():
     if not os.path.exists("urls_test.txt"):
-        return [], []
+        return []
     
     with open("urls_test.txt", "r", encoding="utf-8") as f:
         urls = [line.strip() for line in f if line.strip()]
         
-    target_domains = []
-    ru_blocked_domains = []
+    all_extracted = []
     
     for url in urls:
-        is_blocklist = any(keyword in url.lower() for keyword in ["blocked", "antizapret", "filter"])
         try:
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             with urllib.request.urlopen(req, timeout=15) as response:
                 if url.endswith(".json"):
                     data = json.loads(response.read().decode('utf-8'))
-                    extracted = []
                     if "payload" in data:
-                        process_extracted_items(data["payload"], extracted)
+                        process_extracted_items(data["payload"], all_extracted)
                     if "rules" in data and isinstance(data["rules"], list):
                         for rule in data["rules"]:
                             if isinstance(rule, dict):
-                                if "domain" in rule: process_extracted_items(rule["domain"], extracted)
-                                if "domain_suffix" in rule: process_extracted_items(rule["domain_suffix"], extracted)
-                    if is_blocklist:
-                        ru_blocked_domains.extend(extracted)
-                    else:
-                        target_domains.extend(extracted)
+                                if "domain" in rule: process_extracted_items(rule["domain"], all_extracted)
+                                if "domain_suffix" in rule: process_extracted_items(rule["domain_suffix"], all_extracted)
                 else:
                     lines = response.read().decode('utf-8', errors='ignore').splitlines()
-                    extracted = []
                     for line in lines:
                         line = line.strip()
                         if line and not line.startswith("#") and not line.startswith("//"):
                             domain = line.split(",")[-1] if "," in line else line
-                            extracted.append(domain)
-                    if is_blocklist:
-                        ru_blocked_domains.extend(extracted)
-                    else:
-                        target_domains.extend(extracted)
+                            all_extracted.append(domain)
         except:
             pass
 
-    clean_targets = set()
-    for d in target_domains:
+    clean_domains = set()
+    for d in all_extracted:
         if not isinstance(d, str): continue
         d_clean = d.strip().split(",")[-1] if "," in d else d.strip()
-        if d_clean and not d_clean.startswith("+.") and "." in d_clean:
-            clean_targets.add(d_clean.lower())
+        d_clean = d_clean.replace("+.", "").replace(".", "")
+        if d_clean and "." in d_clean and len(d_clean) > 3:
+            clean_domains.add(d_clean.lower())
 
-    clean_blocks = set()
-    for d in ru_blocked_domains:
-        if not isinstance(d, str): continue
-        d_clean = d.strip().split(",")[-1] if "," in d else d.strip()
-        if d_clean and not d_clean.startswith("+.") and "." in d_clean:
-            clean_blocks.add(d_clean.lower())
-
-    return list(clean_targets), list(clean_blocks)
+    return sorted(list(clean_domains))
 
 def main():
     try:
@@ -133,30 +115,10 @@ def main():
     with open("proxy.txt", "w", encoding="utf-8") as f:
         f.write(b64_output)
 
-    target_domains, blocked_databases = load_domains_from_sources()
-    
-    if not blocked_databases:
-        blocked_list = target_domains
-    else:
-        blocked_list = []
-        block_set = set(blocked_databases)
-        for domain in target_domains:
-            domain_lower = domain.lower()
-            is_blocked = False
-            if domain_lower in block_set:
-                is_blocked = True
-            else:
-                parts = domain_lower.split('.')
-                for i in range(len(parts) - 1):
-                    parent_domain = '.'.join(parts[i:])
-                    if parent_domain in block_set:
-                        is_blocked = True
-                        break
-            if is_blocked:
-                blocked_list.append(domain)
+    blocked_list = load_domains_from_sources()
 
     with open("My_rules_BLOCKED_test.txt", "w", encoding="utf-8") as f:
-        f.write("\n".join(sorted(list(set(blocked_list)))) + "\n")
+        f.write("\n".join(blocked_list) + "\n")
 
 if __name__ == "__main__":
     main()
