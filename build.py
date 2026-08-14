@@ -27,18 +27,27 @@ def fetch_external_domains(url, index):
         if url.endswith(".srs"):
             srs_file = f"temp_reject_{index}.srs"
             json_file = f"temp_reject_{index}.json"
+            
             with urllib.request.urlopen(req, timeout=15) as response:
                 with open(srs_file, "wb") as out:
                     out.write(response.read())
+            
             subprocess.run(["sing-box", "rule-set", "decompile", srs_file, "--output", json_file], check=True)
+            
             if os.path.exists(json_file):
                 with open(json_file, "r", encoding="utf-8") as jf:
                     data = json.load(jf)
                     for rule in data.get("rules", []):
-                        if "domain" in rule: domains.update(rule["domain"])
-                        if "domain_suffix" in rule: domains.update(rule["domain_suffix"])
+                        if "domain" in rule:
+                            domains.update(rule["domain"])
+                        if "domain_suffix" in rule:
+                            domains.update(rule["domain_suffix"])
+                        if "domain_keyword" in rule:
+                            domains.update(rule["domain_keyword"])
+            
             if os.path.exists(srs_file): os.remove(srs_file)
             if os.path.exists(json_file): os.remove(json_file)
+            
         else:
             with urllib.request.urlopen(req, timeout=10) as response:
                 content = response.read().decode('utf-8', errors='ignore')
@@ -46,10 +55,13 @@ def fetch_external_domains(url, index):
                     line = line.strip()
                     if not line or line.startswith('#') or line.startswith('!'):
                         continue
+                    
                     cleaned = re.sub(r'^[|]*', '', line)
-                    cleaned = re.sub(r'[\^$/].*$', '', cleaned)
+                    cleaned = cleaned.split('$')[0].split('^')[0].split('/')[0].strip()
+                    
                     if cleaned and '.' in cleaned and not cleaned.startswith('127.') and not cleaned.startswith('0.'):
                         domains.add(cleaned)
+                        
     except Exception as e:
         print(f"Error loading {url}: {e}")
     return domains
@@ -70,33 +82,9 @@ for item in external_items:
     if ip_pattern.match(item_clean):
         final_ips.add(f"{item_clean}/32")
     else:
-        final_domains.add(item)
+        final_domains.add(item_clean)
 
 if 'rules' in data and data['rules']:
     for rule in data['rules']:
         if 'domain_suffix' in rule:
-            for item in rule['domain_suffix']:
-                item_clean = item.strip().replace("`", "").replace("*.", "")
-                if ip_pattern.match(item_clean):
-                    final_ips.add(f"{item_clean}/32")
-                else:
-                    final_domains.add(item)
-         if 'ip_cidr' in rule:
-            for item in rule['ip_cidr']:
-                item_clean = item.strip().split('/')[0].replace("`", "").replace("*.", "")
-                if ip_pattern.match(item_clean):
-                    final_ips.add(f"{item_clean}/32")
-
-rule_dict = {}
-if final_domains:
-    rule_dict["domain_suffix"] = sorted(list(final_domains))
-if final_ips:
-    rule_dict["ip_cidr"] = sorted(list(final_ips))
-
-data['version'] = 1
-data['rules'] = [rule_dict] if rule_dict else []
-
-with open('reject_rules.json', 'w', encoding='utf-8') as f:
-    json.dump(data, f, indent=2, ensure_ascii=False)
-
-print(f"reject_rules.json updated successfully in version 1 format!")
+            for item in rule
