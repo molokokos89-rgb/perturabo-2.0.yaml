@@ -5,10 +5,10 @@ import os
 import subprocess
 
 EXTERNAL_REJECT_URLS = [
-    "https://githubusercontent.com",
-    "https://githubusercontent.com",
-    "https://github.com",
-    "https://github.com"
+    "https://raw.githubusercontent.com/AdguardTeam/AdguardFilters/master/MobileFilter/sections/adservers.txt",
+    "https://raw.githubusercontent.com/5kms/oisd-singbox/main/domain_suffix_reject.txt",
+    "https://github.com/KaringX/karing-ruleset/raw/refs/heads/sing/russia/runetfreedom/sing-box/rule-set-geosite/geosite-adblock.srs",
+    "https://github.com/KaringX/karing-ruleset/raw/refs/heads/sing/russia/runetfreedom/sing-box/rule-set-geosite/geosite-adblockplus.srs"
 ]
 
 def load_json(file_path):
