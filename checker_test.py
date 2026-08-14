@@ -40,6 +40,14 @@ def extract_host(line):
         return None
     return None
 
+def process_extracted_items(items, target_list):
+    if isinstance(items, list):
+        for item in items:
+            if isinstance(item, str):
+                target_list.append(item)
+    elif isinstance(items, str):
+        target_list.append(items)
+
 def load_domains_from_sources():
     if not os.path.exists("urls_test.txt"):
         return [], []
@@ -59,11 +67,12 @@ def load_domains_from_sources():
                     data = json.loads(response.read().decode('utf-8'))
                     extracted = []
                     if "payload" in data:
-                        extracted.extend(data["payload"])
-                    if "rules" in data:
+                        process_extracted_items(data["payload"], extracted)
+                    if "rules" in data and isinstance(data["rules"], list):
                         for rule in data["rules"]:
-                            if "domain" in rule: extracted.extend(rule["domain"])
-                            if "domain_suffix" in rule: extracted.extend(rule["domain_suffix"])
+                            if isinstance(rule, dict):
+                                if "domain" in rule: process_extracted_items(rule["domain"], extracted)
+                                if "domain_suffix" in rule: process_extracted_items(rule["domain_suffix"], extracted)
                     if is_blocklist:
                         ru_blocked_domains.extend(extracted)
                     else:
@@ -85,14 +94,16 @@ def load_domains_from_sources():
 
     clean_targets = set()
     for d in target_domains:
+        if not isinstance(d, str): continue
         d_clean = d.strip().split(",")[-1] if "," in d else d.strip()
-        if d_clean and not d_clean.startswith("+."):
+        if d_clean and not d_clean.startswith("+.") and "." in d_clean:
             clean_targets.add(d_clean.lower())
 
     clean_blocks = set()
     for d in ru_blocked_domains:
+        if not isinstance(d, str): continue
         d_clean = d.strip().split(",")[-1] if "," in d else d.strip()
-        if d_clean and not d_clean.startswith("+."):
+        if d_clean and not d_clean.startswith("+.") and "." in d_clean:
             clean_blocks.add(d_clean.lower())
 
     return list(clean_targets), list(clean_blocks)
