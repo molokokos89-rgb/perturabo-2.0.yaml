@@ -81,10 +81,12 @@ if 'rules' in data and data['rules']:
                     final_ips.add(f"{item_clean}/32")
                 else:
                     final_domains.add(item)
-        if 'ip_cidr' in rule:
-            final_ips.update(rule['ip_cidr'])
+         if 'ip_cidr' in rule:
+            for item in rule['ip_cidr']:
+                item_clean = item.strip().split('/')[0].replace("`", "").replace("*.", "")
+                if ip_pattern.match(item_clean):
+                    final_ips.add(f"{item_clean}/32")
 
-# Собираем строго под синтаксис Версии 1 (один общий блок правил)
 rule_dict = {}
 if final_domains:
     rule_dict["domain_suffix"] = sorted(list(final_domains))
