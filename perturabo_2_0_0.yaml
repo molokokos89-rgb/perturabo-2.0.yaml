@@ -26,14 +26,17 @@ dns:
   enable: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  respect-rules: true
+  respect-rules: false
   ipv6: false
+  nameserver:
+    - https://mama-medved-777.molokokos89.workers.dev/dns-query
+    - https://dns.google/dns-query
+    - 9.9.9.9
   direct-nameserver:
     - 77.88.8.8
     - 77.88.8.1
-  nameserver:
-    - https://mama-medved-777.molokokos89.workers.dev/dns-query
   proxy-server-nameserver:
+    - https://dns.google/dns-query
     - 8.8.8.8
     - 8.8.4.4
   fake-ip-filter:
