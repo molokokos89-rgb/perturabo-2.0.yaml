@@ -8,7 +8,7 @@ import urllib.parse
 import subprocess
 import os
 
-BAD_KEYWORDS = ["anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
+BAD_KEYWORDS = ["russia", "anycast", "fixnet", "fixcord", "cloudflare", "warp", "cf-"]
 
 def safe_b64decode(data):
     data = data.strip()
