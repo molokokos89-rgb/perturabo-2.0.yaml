@@ -39,11 +39,6 @@ dns:
     - https://dns.google/dns-query
     - https://1.1.1.1/dns-query
   fake-ip-filter:
-    - '*.githubusercontent.com'
-    - '*.github.com'
-    - 'github.com'
-    - '*.gstatic.com'
-    - 'gstatic.com'
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
     - '*.boosty.to'
