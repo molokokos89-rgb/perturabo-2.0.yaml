@@ -94,7 +94,7 @@ proxy-groups:
     interval: 600
     timeout: 5000
     lazy: false
-    tolerance: 300
+    tolerance: 200
     idle-timeout: 1800
     proxies:
       - vless-sub-1
