@@ -31,12 +31,14 @@ dns:
   nameserver:
     - https://mama-medved-777.molokokos89.workers.dev/dns-query
     - https://dns.google/dns-query
+    - 9.9.9.9
   direct-nameserver:
     - 77.88.8.8
     - 77.88.8.1
   proxy-server-nameserver:
     - https://dns.google/dns-query
-    - https://1.1.1.1/dns-query
+    - 8.8.8.8
+    - 8.8.4.4
   fake-ip-filter:
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
