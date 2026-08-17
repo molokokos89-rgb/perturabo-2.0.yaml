@@ -37,8 +37,8 @@ dns:
     - 77.88.8.1
   proxy-server-nameserver:
     - https://dns.google/dns-query
-    - 8.8.8.8
-    - 8.8.4.4
+    - https://8.8.8.8/dns-query
+    - https://8.8.4.4/dns-query
   fake-ip-filter:
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
