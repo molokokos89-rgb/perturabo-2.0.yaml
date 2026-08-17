@@ -26,7 +26,7 @@ dns:
   enable: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  respect-rules: false
+  respect-rules: true
   ipv6: false
   nameserver:
     - h3://mama-medved-777.molokokos89.workers.dev/dns-query
