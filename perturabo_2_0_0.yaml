@@ -80,7 +80,36 @@ dns:
     - '*.net.ru'
     - '*.pp.ru'
     - '*.pool.ntp.org'
-    - '*.ntp.org'
+    - '*.ntp.org'  
+    - '*.telegram.org'
+    - '*.telegram.dog'
+    - '*.telegram.me'
+    - '*.t.me'
+    - '*.tdesktop.com'
+    - '*.whatsapp.net'
+    - '*.whatsapp.com'
+    - '*.whatsapp.biz'
+    - '*.viber.com'
+    - '*.signal.org'
+    - '*.whispersystems.org'
+    - '*.apple.com'
+    - '*.icloud.com'
+    - '*.mzstatic.com'
+    - '149.154.160.0/20'
+    - '149.154.164.0/22'
+    - '149.154.172.0/22'
+    - '91.108.4.0/22'
+    - '91.108.8.0/22'
+    - '91.108.12.0/22'
+    - '91.108.16.0/22'
+    - '91.108.20.0/22'
+    - '91.108.36.0/23'
+    - '91.108.38.0/23'
+    - '91.108.56.0/22'
+    - '157.240.0.0/16'
+    - '31.13.0.0/16'
+    - '18.244.0.0/15'
+    - '17.0.0.0/8'
 
 proxy-providers:
   vless-sub-1:
@@ -134,18 +163,53 @@ rule-providers:
     interval: 43200
 
 rules:
-  - RULE-SET,my-reject-rules,REJECT
-  - DOMAIN-SUFFIX,xn--p1ai,DIRECT
-  - DOMAIN-SUFFIX,ru,DIRECT
-  - DOMAIN-SUFFIX,su,DIRECT
-  - RULE-SET,my-direct-rules,DIRECT
   - DOMAIN-SUFFIX,browserleaks.com,VLESS-Auto
   - DOMAIN,gemini.google.com,VLESS-Auto
   - DOMAIN,aistudio.google.com,VLESS-Auto
   - DOMAIN,generativelanguage.googleapis.com,VLESS-Auto
   - DOMAIN,alkalimining-pa.googleapis.com,VLESS-Auto
   - DOMAIN,proactivebackend-pa.googleapis.com,VLESS-Auto
-  - PROCESS-NAME,Fallout76.exe,VLESS-Auto
+  - DOMAIN-SUFFIX,browserleaks.com,VLESS-Auto
+  - DOMAIN-SUFFIX,telegram.org,VLESS-Auto
+  - DOMAIN-SUFFIX,telegram.dog,VLESS-Auto
+  - DOMAIN-SUFFIX,telegram.me,VLESS-Auto
+  - DOMAIN-SUFFIX,t.me,VLESS-Auto
+  - DOMAIN-SUFFIX,tdesktop.com,VLESS-Auto
+  - IP-CIDR,149.154.160.0/20,VLESS-Auto
+  - IP-CIDR,149.154.164.0/22,VLESS-Auto
+  - IP-CIDR,149.154.172.0/22,VLESS-Auto
+  - IP-CIDR,91.108.4.0/22,VLESS-Auto
+  - IP-CIDR,91.108.8.0/22,VLESS-Auto
+  - IP-CIDR,91.108.12.0/22,VLESS-Auto
+  - IP-CIDR,91.108.16.0/22,VLESS-Auto
+  - IP-CIDR,91.108.20.0/22,VLESS-Auto
+  - IP-CIDR,91.108.36.0/23,VLESS-Auto
+  - IP-CIDR,91.108.38.0/23,VLESS-Auto
+  - IP-CIDR,91.108.56.0/22,VLESS-Auto
+  - DOMAIN-SUFFIX,whatsapp.net,VLESS-Auto
+  - DOMAIN-SUFFIX,whatsapp.com,VLESS-Auto
+  - DOMAIN-SUFFIX,whatsapp.biz,VLESS-Auto
+  - DOMAIN-SUFFIX,viber.com,VLESS-Auto
+  - DOMAIN-SUFFIX,signal.org,VLESS-Auto
+  - DOMAIN-SUFFIX,whispersystems.org,VLESS-Auto
+  - IP-CIDR,157.240.0.0/16,VLESS-Auto
+  - IP-CIDR,31.13.0.0/16,VLESS-Auto
+  - IP-CIDR,18.244.0.0/15,VLESS-Auto
+  - DOMAIN-SUFFIX,apple.com,DIRECT
+  - DOMAIN-SUFFIX,icloud.com,DIRECT
+  - DOMAIN-SUFFIX,mzstatic.com,DIRECT
+  - IP-CIDR,17.0.0.0/8,DIRECT
+  - DOMAIN-SUFFIX,nspk.ru,DIRECT
+  - DOMAIN-SUFFIX,sbp.ru,DIRECT
+  - DOMAIN-KEYWORD,sbp,DIRECT
+  - DOMAIN-SUFFIX,xn--p1ai,DIRECT
+  - DOMAIN-SUFFIX,ru,DIRECT
+  - DOMAIN-SUFFIX,su,DIRECT
+  - DOMAIN-SUFFIX,rf,DIRECT
+  - DOMAIN-SUFFIX,org,DIRECT
+  - RULE-SET,my-reject-rules,REJECT
   - RULE-SET,my-proxy-rules,VLESS-Auto
   - RULE-SET,nsfw-rules,VLESS-Auto
+  - RULE-SET,my-direct-rules,DIRECT
+  - DOMAIN-SUFFIX,xn--p1ai,DIRECT
   - MATCH,VLESS-Auto
