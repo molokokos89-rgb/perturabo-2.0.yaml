@@ -135,6 +135,11 @@ rule-providers:
     interval: 43200
 
 rules:
+  - AND,((CONN-ANT,UDP),(DST-PORT,443),(DOMAIN-KEYWORD,cloudflare)),REJECT
+  - AND,((CONN-ANT,UDP),(DST-PORT,80), (DOMAIN-KEYWORD,cloudflare)),REJECT
+  - DOMAIN-KEYWORD,cloudflare,VLESS-Auto
+  - DOMAIN-SUFFIX,cloudflare.com,VLESS-Auto
+  - DOMAIN-SUFFIX,cloudflare-dns.com,VLESS-Auto
   - DOMAIN-SUFFIX,browserleaks.com,VLESS-Auto
   - DOMAIN,gemini.google.com,VLESS-Auto
   - DOMAIN,aistudio.google.com,VLESS-Auto
