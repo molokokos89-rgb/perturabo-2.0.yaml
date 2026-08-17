@@ -77,21 +77,7 @@ dns:
     - '*.net.ru'
     - '*.pp.ru'
     - '*.pool.ntp.org'
-    - '*.ntp.org'  
-    - '*.telegram.org'
-    - '*.telegram.dog'
-    - '*.telegram.me'
-    - '*.t.me'
-    - '*.tdesktop.com'
-    - '*.whatsapp.net'
-    - '*.whatsapp.com'
-    - '*.whatsapp.biz'
-    - '*.viber.com'
-    - '*.signal.org'
-    - '*.whispersystems.org'
-    - '*.apple.com'
-    - '*.icloud.com'
-    - '*.mzstatic.com'
+    - '*.ntp.org'
     
 proxy-providers:
   vless-sub-1:
