@@ -40,9 +40,6 @@ dns:
   proxy-server-nameserver:
     - h3://9.9.9.9/dns-query
     - h3://149.112.112.112/dns-query
-  nameserver-policy:
-    'geosite:cn,private':
-    '*.ru,*.su,*.by,*.xn--p1ai,*.edu.ru, *org, *.gov.ru'
   fake-ip-filter:
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
