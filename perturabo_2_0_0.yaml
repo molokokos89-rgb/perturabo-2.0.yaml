@@ -40,6 +40,10 @@ dns:
   proxy-server-nameserver:
     - h3://9.9.9.9/dns-query
     - h3://149.112.112.112/dns-query
+    - h3://9.9.9.9/dns-query
+    - h3://dns.google/dns-query
+    - h3://8.8.8.8/dns-query
+    - h3://8.8.4.4/dns-query
   fake-ip-filter:
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
