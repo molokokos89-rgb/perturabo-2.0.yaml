@@ -29,16 +29,19 @@ dns:
   respect-rules: true
   ipv6: false
   nameserver:
-    - https://mama-medved-777.molokokos89.workers.dev/dns-query
-    - https://dns.google/dns-query
-    - 9.9.9.9
+    - h3://mama-medved-777.molokokos89.workers.dev/dns-query
+    - h3://dns.google/dns-query
+    - tls://dns.google/dns-query
+    - tls://8.8.8.8/dns-query
+    - tls://8.8.4.4/dns-query
   direct-nameserver:
-    - 77.88.8.8
-    - 77.88.8.1
+    - udp://77.88.8.8
+    - udp://77.88.8.1
   proxy-server-nameserver:
-    - https://dns.google/dns-query
-    - https://8.8.8.8/dns-query
-    - https://8.8.4.4/dns-query
+    - h3://9.9.9.9/dns-query
+    - h3://dns.google/dns-query
+    - h3://8.8.8.8/dns-query
+    - h3://8.8.4.4/dns-query
   fake-ip-filter:
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
