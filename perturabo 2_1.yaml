@@ -29,7 +29,6 @@ dns:
   respect-rules: true
   ipv6: false
   nameserver:
-    - h3://mama-medved-777.molokokos89.workers.dev/dns-query
     - h3://dns.google/dns-query
     - tls://dns.google/dns-query
     - tls://8.8.8.8/dns-query
