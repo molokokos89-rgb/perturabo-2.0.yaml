@@ -34,6 +34,30 @@ jobs:
           rm -rf sing-box.tar.gz sing-box-*
           sing-box version
 
+      - name: Fix JSON Syntax Automatically
+        shell: python
+        run: |
+          import json
+          import re
+          import os
+
+          file_path = "My_rules_RUS.json"
+          if os.path.exists(file_path):
+              try:
+                  with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                      content = f.read()
+                  
+                  content = re.sub(r'[\u200b\u200c\u200d\ufeff\u200e\u200f\u00ad]', '', content)
+                  content = content.replace('“', '"').replace('”', '"')
+                  
+                  data = json.loads(content)
+                  
+                  with open(file_path, "w", encoding="utf-8") as f:
+                      json.dump(data, f, indent=2, ensure_ascii=False)
+                  print("JSON clean and fixed!")
+              except Exception as e:
+                  print(f"Skipping or error: {e}")
+
       - name: Run Build Script
         run: python build.py
 
