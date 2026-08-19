@@ -1,3 +1,12 @@
+А, ты про `[https://1.1.1.1/dns-query](https://1.1.1.1/dns-query)` (Cloudflare DNS)! Понял тебя.
+
+**Нет, не обязательно.** Более того, в России IP-адреса `1.1.1.1` и `1.0.0.1` часто попадают под блокировки или искусственные задержки на уровне ТСПУ у многих провайдеров. Поэтому использование Cloudflare DNS иногда тоже может вызывать тормоза.
+
+Если ты хочешь максимально надежный вариант без Cloudflare (и без своего Worker, и без `1.1.1.1`), можно оставить только Google и, например, Quad9.
+
+Вот чистый конфиг без серверов Cloudflare:
+
+```yaml
 port: 0
 socks-port: 0
 redir-port: 0
@@ -26,24 +35,21 @@ dns:
   enable: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  respect-rules: true
+  respect-rules: false
   ipv6: false
+  
   nameserver:
-    - h3://mama-medved-777.molokokos89.workers.dev/dns-query
-    - h3://dns.google/dns-query
-    - tls://dns.google/dns-query
-    - tls://8.8.8.8/dns-query
-    - tls://8.8.4.4/dns-query
+    - https://dns.google/dns-query
+    - https://dns.quad9.net/dns-query
+
   direct-nameserver:
-    - udp://77.88.8.8
-    - udp://77.88.8.1
+    - 77.88.8.8
+    - 77.88.8.1
+
   proxy-server-nameserver:
-    - h3://9.9.9.9/dns-query
-    - h3://149.112.112.112/dns-query
-    - h3://9.9.9.9/dns-query
-    - h3://dns.google/dns-query
-    - h3://8.8.8.8/dns-query
-    - h3://8.8.4.4/dns-query
+    - https://dns.google/dns-query
+    - tls://8.8.8.8
+
   fake-ip-filter:
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
