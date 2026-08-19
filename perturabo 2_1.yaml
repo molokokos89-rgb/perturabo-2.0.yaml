@@ -26,21 +26,21 @@ dns:
   enable: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  respect-rules: true
+  respect-rules: false
   ipv6: false
+  
   nameserver:
-    - h3://dns.google/dns-query
-    - tls://dns.google/dns-query
-    - tls://8.8.8.8/dns-query
-    - tls://8.8.4.4/dns-query
+    - https://dns.google/dns-query
+    - https://dns.quad9.net/dns-query
+
   direct-nameserver:
-    - udp://77.88.8.8
-    - udp://77.88.8.1
+    - 77.88.8.8
+    - 77.88.8.1
+
   proxy-server-nameserver:
-    - h3://9.9.9.9/dns-query
-    - h3://dns.google/dns-query
-    - h3://8.8.8.8/dns-query
-    - h3://8.8.4.4/dns-query
+    - https://dns.google/dns-query
+    - tls://8.8.8.8
+
   fake-ip-filter:
     - '*.nalog.ru'
     - '*.nalog.gov.ru'
