@@ -28,7 +28,7 @@ jobs:
       - name: Filter and generate clean proxy list
         run: |
           python checker.py
-          rm -f proxy_test.txt checker_test.py
+          rm -f proxy.txt checker.py
 
       - name: Commit and Push changes
         run: |
