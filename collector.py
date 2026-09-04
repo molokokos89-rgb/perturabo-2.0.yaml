@@ -19,7 +19,7 @@ SOURCES = [
     "https://raw.githubusercontent.com/free-v2ray-public-list/refs/heads/main/all_extracted_configs.txt"
 ]
 
-PROTOCOLS = ["ss://", "vmess://", "trojan://", "hy2://", "hysteria2://", "vless://"]
+PROTOCOLS = ["ss://", "vmess://", "trojan://", "hy2://", "hysteria2://"]
 
 def fetch_url(url):
     try:
