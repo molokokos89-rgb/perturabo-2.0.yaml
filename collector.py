@@ -13,7 +13,7 @@ SOURCES = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt"
 ]
 
-PROTOCOLS = ["ss://", "vmess://", "trojan://", "hy2://", "hysteria2://"]
+PROTOCOLS = ["ss://", "vmess://", "trojan://", "hy2://", "hysteria2://", "vless://"]
 
 def fetch_url(url):
     try:
