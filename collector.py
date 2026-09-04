@@ -8,7 +8,6 @@ SOURCES = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/refs/heads/main/separated-protocols-chunks/hysteria2/EbraSha-Protocol-Chunks-hysteria2-001.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/refs/heads/main/trojan_configs.txt",
-    "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/refs/heads/main/V2Ray-Config-By-EbraSha.txt",
     "https://raw.githubusercontent.com/wlunlocker/vpn-configs/refs/heads/blob/main/blacklist_all.txt",
     "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/hy2.txt",
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/normal/mix",
