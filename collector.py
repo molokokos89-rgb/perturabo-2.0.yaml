@@ -5,7 +5,7 @@ collector.py для perturabo-2.0
 - без vless (ТПУ режет)
 - приоритет: hy2 > trojan > ss > vmess
 - дедуп по host:port
-- лимит на каждый источник (не раздуваем до 5000+)
+- лимит на каждый источник
 """
 
 import urllib.request
@@ -15,23 +15,25 @@ import socket
 import json
 from collections import defaultdict
 
-# --- источники (только рабочие / проверенные) ---
+# --- источники (рабочие на 2026-09) ---
 SOURCES = [
-    # hy2 / mixed
-    "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub1.txt",
-    "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Splitted-By-Protocol/hysteria2.txt",
-    "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/hysteria2_configs.txt",
+    # EbraSha — основные hy2 (рабочие пути)
+    "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/separated-protocols/hysteria2_configs.txt",
+    "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/separated-protocols-chunks/hysteria2/EbraSha-Protocol-Chunks-hysteria2-001.txt",
+    "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/separated-protocols/trojan_configs.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/trojan_configs.txt",
+    "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/ss_configs.txt",
+    # barry-far
+    "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/Sub1.txt",
+    "https://raw.githubusercontent.com/barry-far/V2ray-Config/main/Sub2.txt",
+    # прочее
     "https://raw.githubusercontent.com/Alirewa/V2ray-Configs/main/config.txt",
-    # igareck (если живы)
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt",
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt",
 ]
 
 # vless специально НЕ берём
 PROTOCOLS = ["hy2://", "hysteria2://", "trojan://", "ss://", "vmess://"]
 
-# приоритет (меньше = лучше)
 PROTOCOL_PRIORITY = {
     "hy2://": 0,
     "hysteria2://": 0,
@@ -40,11 +42,9 @@ PROTOCOL_PRIORITY = {
     "vmess://": 3,
 }
 
-# сколько уникальных host:port брать с ОДНОГО источника
-MAX_PER_SOURCE = 120
-
-# общий потолок на foreign после всех источников
-MAX_FOREIGN_TOTAL = 600
+# с hy2-источников можно брать больше
+MAX_PER_SOURCE = 200
+MAX_FOREIGN_TOTAL = 900
 
 BAD_KEYWORDS = ["russia", "anycast", "offnet", "offcord", "cloudflare", "warp", "cf-"]
 
@@ -54,8 +54,10 @@ def fetch_url(url):
         req = urllib.request.Request(
             url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
         )
-        with urllib.request.urlopen(req, timeout=12) as response:
+        with urllib.request.urlopen(req, timeout=15) as response:
             content = response.read().decode("utf-8", errors="ignore")
+        # HTML-entities в ebrasha (&amp; → &)
+        content = content.replace("&amp;", "&")
         if not any(proto in content for proto in PROTOCOLS):
             try:
                 clean_content = content.strip().replace("\n", "").replace("\r", "")
@@ -82,9 +84,15 @@ def safe_b64decode(data):
 
 
 def extract_host_port(proxy_link):
-    """Вернёт (host, port) или (None, None)."""
     try:
         line = proxy_link.strip()
+        # URL-decode %xx в host части ebrasha
+        if "%" in line:
+            try:
+                from urllib.parse import unquote
+                line = unquote(line)
+            except Exception:
+                pass
         if line.startswith("ss://"):
             part = line.split("://")[1].split("#")[0]
             if "@" in part:
@@ -124,7 +132,6 @@ def protocol_of(link):
 def is_valid_node(proxy_link):
     if any(bad in proxy_link.lower() for bad in BAD_KEYWORDS):
         return False
-    # vless на всякий случай отсекаем
     if proxy_link.lower().startswith("vless://"):
         return False
     host, port = extract_host_port(proxy_link)
@@ -158,7 +165,6 @@ def check_is_russia(host):
 
 def main():
     print("=== COLLECTOR (hy2 > trojan > ss, no vless) ===")
-    # key = host:port → лучшая ссылка по приоритету протокола
     foreign_map = {}
     ru_map = {}
     per_source_count = defaultdict(int)
@@ -191,7 +197,6 @@ def main():
 
         print(f"  taken from source: {per_source_count[source]}")
 
-    # сортируем foreign: сначала hy2, потом trojan, ss...
     def sort_key(link):
         return (PROTOCOL_PRIORITY.get(protocol_of(link), 99), link)
 
