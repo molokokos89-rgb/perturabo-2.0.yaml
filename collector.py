@@ -3,7 +3,7 @@
 """
 collector.py для perturabo-2.0
 - без vless (ТПУ режет)
-- приоритет: hy2 > trojan > ss > vmess
+- приоритет: hy2 > trojan > vless > ss > vmess
 - дедуп по host:port
 - лимит на каждый источник
 """
@@ -16,7 +16,7 @@ import json
 from collections import defaultdict
 
 SOURCES = [
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS%2BAll_RUS.txt",
+    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt",
     "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/hy2.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/separated-protocols/hysteria2_configs.txt",
     "https://raw.githubusercontent.com/morpheusadam/v2ray-config/main/subs/bundles/hysteria2.txt",
