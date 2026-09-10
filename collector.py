@@ -16,23 +16,28 @@ from collections import defaultdict
 
 SOURCES = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt",
+    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt",
+    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS_WEAK_DPI_RUS.txt",
     "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/hy2.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/separated-protocols/hysteria2_configs.txt",
     "https://raw.githubusercontent.com/morpheusadam/v2ray-config/main/subs/bundles/hysteria2.txt",
     "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/All_Configs_Sub.txt",
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt"
 ]
 
-PROTOCOLS = ["ss://", "vmess://", "trojan://", "hy2://", "hysteria2://", "vless://"]
+PROTOCOLS = ["hy2://", "hysteria2://", "trojan://", "vless://", "ss://", "vmess://"]
 
+# 1 hy2, 2 trojan, 3 vless, 4 ss, 5 vmess
 PROTOCOL_PRIORITY = {
     "hy2://": 0,
     "hysteria2://": 0,
     "trojan://": 1,
     "vless://": 2,
-    "ss://": 2,
-    "vmess://": 3,
+    "ss://": 3,
+    "vmess://": 4,
 }
+
+MAX_PER_SOURCE = 150
+MAX_FOREIGN_TOTAL = 250
 
 BAD_KEYWORDS = [
     "russia", "russian", "росси", "москва", "moscow", "россия",
@@ -43,6 +48,8 @@ RU_NAME_MARKERS = [
     "moscow", "москва", "россия", "росси", "yandex-cloud", "selectel",
     "vk-cloud", "timeweb",
 ]
+
+
 def fetch_url(url):
     try:
         req = urllib.request.Request(
@@ -50,7 +57,6 @@ def fetch_url(url):
         )
         with urllib.request.urlopen(req, timeout=15) as response:
             content = response.read().decode("utf-8", errors="ignore")
-        # HTML-entities в ebrasha (&amp; → &)
         content = content.replace("&amp;", "&")
         if not any(proto in content for proto in PROTOCOLS):
             try:
@@ -80,7 +86,6 @@ def safe_b64decode(data):
 def extract_host_port(proxy_link):
     try:
         line = proxy_link.strip()
-        # URL-decode %xx в host части ebrasha
         if "%" in line:
             try:
                 from urllib.parse import unquote
@@ -92,17 +97,13 @@ def extract_host_port(proxy_link):
             if "@" in part:
                 host_port = part.split("@")[1]
             else:
-                decoded = safe_b64decode(part)
-                host_port = decoded.split("@")[1]
+                host_port = safe_b64decode(part).split("@")[1]
             host = host_port.split(":")[0].strip("[]")
             port = host_port.split(":")[1].split("/")[0].split("?")[0]
             return host, port
-        if line.startswith(("trojan://", "hy2://", "hysteria2://")):
+        if line.startswith(("trojan://", "hy2://", "hysteria2://", "vless://")):
             rest = line.split("://")[1]
-            if "@" in rest:
-                host_port = rest.split("@")[1]
-            else:
-                host_port = rest
+            host_port = rest.split("@")[1] if "@" in rest else rest
             host = host_port.split(":")[0].split("?")[0].strip("[]")
             port = host_port.split(":")[1].split("/")[0].split("?")[0].split("#")[0]
             return host, port
@@ -126,8 +127,12 @@ def protocol_of(link):
 def is_valid_node(proxy_link):
     if any(bad in proxy_link.lower() for bad in BAD_KEYWORDS):
         return False
-    if proxy_link.lower().startswith("vless://"):
+    if "🇷🇺" in proxy_link:
         return False
+    low = proxy_link.lower()
+    for m in RU_NAME_MARKERS:
+        if m in low:
+            return False
     host, port = extract_host_port(proxy_link)
     if not host or not port:
         return False
@@ -137,7 +142,7 @@ def is_valid_node(proxy_link):
 def check_is_russia(host):
     if not host:
         return False
-    if host.lower().endswith((".ru", ".su", ".by")):
+    if host.lower().endswith((".ru", ".su", ".by", ".рф")):
         return True
     try:
         try:
@@ -146,7 +151,8 @@ def check_is_russia(host):
         except OSError:
             ip = socket.gethostbyname(host)
         req = urllib.request.Request(
-            f"http://ip-api.com/json/{ip}", headers={"User-Agent": "Mozilla/5.0"}
+            f"http://ip-api.com/json/{ip}?fields=status,countryCode",
+            headers={"User-Agent": "Mozilla/5.0"},
         )
         with urllib.request.urlopen(req, timeout=3) as response:
             data = json.loads(response.read().decode("utf-8"))
@@ -171,6 +177,8 @@ def main():
         seen_in_source = set()
         for line in data.splitlines():
             line = line.strip()
+            if not line or line.startswith("#"):
+                continue
             if not any(line.startswith(p) for p in PROTOCOLS):
                 continue
             if not is_valid_node(line):
@@ -203,7 +211,8 @@ def main():
         f.write("\n".join(ru_list) + "\n")
 
     hy2_n = sum(1 for x in foreign_list if protocol_of(x) in ("hy2://", "hysteria2://"))
-    print(f"Foreign: {len(foreign_list)} (hy2={hy2_n})")
+    vless_n = sum(1 for x in foreign_list if protocol_of(x) == "vless://")
+    print(f"Foreign: {len(foreign_list)} (hy2={hy2_n}, vless={vless_n})")
     print(f"RU nodes: {len(ru_list)}")
     print("OK → raw_combined.txt, ru_nodes.txt")
 
