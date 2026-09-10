@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Collect proxies (hy2 > trojan > ss, no vless)
+      - name: Collect proxies (hy2 > trojan > vless > ss > vmess)
         run: python collector.py
 
       - name: Filter + base64 (proxy.txt, ru_proxies.txt)
