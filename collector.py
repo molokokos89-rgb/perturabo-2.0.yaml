@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 collector.py для perturabo-2.0
-- приоритет: hy2 > trojan > vless > ss > vmess
+- приоритет: hy2 > vless > ss (без trojan/vmess)
 - дедуп по host:port
 - лимит на каждый источник
 """
@@ -24,16 +24,14 @@ SOURCES = [
     "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/All_Configs_Sub.txt",
 ]
 
-PROTOCOLS = ["hy2://", "hysteria2://", "trojan://", "vless://", "ss://", "vmess://"]
+PROTOCOLS = ["hy2://", "hysteria2://", "vless://", "ss://"]  # без trojan/vmess
 
 # 1 hy2, 2 trojan, 3 vless, 4 ss, 5 vmess
 PROTOCOL_PRIORITY = {
     "hy2://": 0,
     "hysteria2://": 0,
-    "trojan://": 1,
-    "vless://": 2,
-    "ss://": 3,
-    "vmess://": 4,
+    "vless://": 1,
+    "ss://": 2,
 }
 
 MAX_PER_SOURCE = 150
@@ -164,7 +162,7 @@ def check_is_russia(host):
 
 
 def main():
-    print("=== COLLECTOR (hy2 > trojan > vless > ss > vmess) ===")
+    print("=== COLLECTOR (hy2 > vless > ss) ===")
     foreign_map = {}
     ru_map = {}
     per_source_count = defaultdict(int)
