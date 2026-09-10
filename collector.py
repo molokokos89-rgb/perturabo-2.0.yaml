@@ -158,7 +158,7 @@ def check_is_russia(host):
 
 
 def main():
-    print("=== COLLECTOR (hy2 > trojan > ss, no vless) ===")
+    print("=== COLLECTOR (hy2 > trojan > vless > ss > vmess) ===")
     foreign_map = {}
     ru_map = {}
     per_source_count = defaultdict(int)
