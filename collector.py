@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 collector.py для perturabo-2.0
-- без vless (ТПУ режет)
 - приоритет: hy2 > trojan > vless > ss > vmess
 - дедуп по host:port
 - лимит на каждый источник
