@@ -30,17 +30,20 @@ PROTOCOL_PRIORITY = {
     "hy2://": 0,
     "hysteria2://": 0,
     "trojan://": 1,
+    "vless://": 2,
     "ss://": 2,
     "vmess://": 3,
 }
 
-# с hy2-источников можно брать больше
-MAX_PER_SOURCE = 200
-MAX_FOREIGN_TOTAL = 900
-
-BAD_KEYWORDS = ["russia", "anycast", "offnet", "offcord", "cloudflare", "warp", "cf-"]
-
-
+BAD_KEYWORDS = [
+    "russia", "russian", "росси", "москва", "moscow", "россия",
+    "anycast", "offnet", "offcord", "cloudflare", "warp", "cf-",
+]
+RU_NAME_MARKERS = [
+    "🇷🇺", "рф", " rf ", "-ru-", "_ru_", " ru ", "[ru]", "russia", "russian",
+    "moscow", "москва", "россия", "росси", "yandex-cloud", "selectel",
+    "vk-cloud", "timeweb",
+]
 def fetch_url(url):
     try:
         req = urllib.request.Request(
