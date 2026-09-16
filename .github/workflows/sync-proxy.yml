@@ -20,22 +20,36 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          
+
       - name: Collect Raw Proxies
-        run: |  
-            python collector.py
-          
+        run: |
+          python collector.py
+
       - name: Filter and generate clean proxy list
         run: |
           python checker.py
-          rm -f raw_combined.txt proxy.txt checker.py
+          # не удаляем proxy.txt — его нужно закоммитить
+          rm -f raw_combined.txt ru_nodes.txt
 
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
-          git rm -f proxy.txt checker.py || true
+
+          # proxy.txt обязателен; остальное — если появилось
+          if [ ! -f proxy.txt ]; then
+            echo "ERROR: proxy.txt was not created by checker.py"
+            ls -la
+            exit 1
+          fi
+
           git add proxy.txt
-          git commit -m "auto-update clean proxies" || echo "Nothing to commit"
-          git push origin HEAD:${{ github.ref_name }}
+          git add blocked.json allowed.json 2>/dev/null || true
+          git add ru_proxies.txt 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "Nothing to commit"
+          else
+            git commit -m "auto-update clean proxies"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
