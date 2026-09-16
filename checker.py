@@ -128,8 +128,7 @@ def main():
         line_str = line.strip()
         if not line_str:
             continue
-        if line_str.startswith("vless://"):
-            continue
+        # vless разрешён (раньше вырезался целиком)
         if any(bad in line_str.lower() for bad in BAD_KEYWORDS):
             continue
         host = extract_host(line_str)
