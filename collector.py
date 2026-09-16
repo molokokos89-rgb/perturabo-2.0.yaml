@@ -17,7 +17,7 @@ from collections import defaultdict
 SOURCES = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS%2BAll_RUS.txt",
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS.txt",
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_SS_WEAK_DPI_RUS.txt",
+    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_VLESS_RUS_mobile.txt",
     "https://raw.githubusercontent.com/sevcator/5ubscrpt10n/main/protocols/hy2.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/separated-protocols/hysteria2_configs.txt",
     "https://raw.githubusercontent.com/morpheusadam/v2ray-config/main/subs/bundles/hysteria2.txt",
@@ -28,8 +28,8 @@ PROTOCOLS = ["hy2://", "hysteria2://", "vless://", "ss://"]  # без trojan/vme
 
 # 1 hy2, 2 trojan, 3 vless, 4 ss, 5 vmess
 PROTOCOL_PRIORITY = {
-    "hy2://": 0,
-    "hysteria2://": 0,
+    "hy2://": 1,
+    "hysteria2://": 1,
     "vless://": 1,
     "ss://": 2,
 }
