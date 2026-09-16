@@ -11,7 +11,7 @@ SOURCES = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_VLESS_RUS_mobile.txt"
 ]
 
-PROTOCOLS = ["ss://", "vmess://", "trojan://", "hy2://", "hysteria2://"]
+PROTOCOLS = ["ss://", "vmess://", "trojan://", "hy2://", "hysteria2://", "vless://"]
 def fetch_url(url):
     try:
         req = urllib.request.Request(
