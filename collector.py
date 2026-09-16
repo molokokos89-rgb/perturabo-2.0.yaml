@@ -1,3 +1,6 @@
+collector.py
+
+Файлы
 import urllib.request
 import base64
 import re
@@ -45,19 +48,12 @@ def extract_ip_or_domain(proxy_link):
         return None
 
 def is_valid_reality(proxy_link):
+    """Только чистый VLESS Reality (security=reality + pbk). SNI не баним — google/ms маски нормальны."""
     if not proxy_link.startswith("vless://"):
         return True
-
-    if "security=reality" not in proxy_link.lower() or "pbk=" not in proxy_link.lower():
+    low = proxy_link.lower()
+    if "security=reality" not in low or "pbk=" not in low:
         return False
-
-    sni_match = re.search(r'[?&]sni=([^&]+)', proxy_link, re.IGNORECASE)
-    if sni_match:
-        sni = sni_match.group(1).split('#')[0].lower()
-        banned_sni_keywords = ["google", "netflix", "facebook", "instagram", "twitter", "youtube"]
-        if any(keyword in sni for keyword in banned_sni_keywords):
-            return False
-
     return True
 
 def check_is_russia(host):
