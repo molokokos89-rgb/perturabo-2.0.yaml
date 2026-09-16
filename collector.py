@@ -1,6 +1,3 @@
-collector.py
-
-Файлы
 import urllib.request
 import base64
 import re
