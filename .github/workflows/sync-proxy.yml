@@ -2,8 +2,7 @@ name: Proxy Sync
 
 on:
   schedule:
-    # каждые 3 часа — чаще, чем раз в сутки, реже, чем каждый час (меньше шума)
-    - cron: '0 */3 * * *'
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -12,46 +11,31 @@ permissions:
 jobs:
   update-proxies:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
 
     steps:
-      - name: Checkout
+      - name: Checkout local repository
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-
-      - name: Collect proxies (hy2 > trojan > vless > ss > vmess)
-        run: python collector.py
-
-      - name: Filter + base64 (proxy.txt, ru_proxies.txt)
-        run: python checker.py
-
-      - name: Filter via RU path (optional but recommended)
+          
+      - name: Collect Raw Proxies
+        run: |  
+            python collector.py
+          
+      - name: Filter and generate clean proxy list
         run: |
-          if [ -f checker_via_ru.py ]; then
-            python checker_via_ru.py
-          else
-            echo "checker_via_ru.py not found — skip"
-          fi
+          python checker.py
+          rm -f raw_combined.txt proxy_test.txt checker_test.py
 
-      - name: Cleanup temp files
-        run: |
-          rm -f raw_combined.txt proxy_test.txt || true
-
-      - name: Commit and push
+      - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add proxy.txt ru_nodes.txt ru_proxies.txt 2>/dev/null || true
-          git add proxy.txt || true
-
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "auto-update proxies (hy2 priority, via-RU filter)"
-            git push origin HEAD:${{ github.ref_name }}
-          fi
+          
+          git rm -f proxy_test.txt checker_test.py || true
+          git add proxy.txt
+          git commit -m "auto-update clean proxies" || echo "Nothing to commit"
+          git push origin HEAD:${{ github.ref_name }}
